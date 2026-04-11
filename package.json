@@ -1,0 +1,18 @@
+{
+  "name": "hit-site",
+  "version": "1.0.0",
+  "description": "HIT Music Business — Site oficial",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.9",
+    "split-type": "^0.3.4"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}

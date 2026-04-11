@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus Club — HIT Music Business</title>
+  <meta name="description" content="Nexus Club: o programa de fidelização que transforma fãs em comunidade." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- GSAP + ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ══ RESET & BASE ═══════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C96A;
+      --gold-dark:  #8B6914;
+      --black:      #080808;
+      --dark:       #111111;
+      --dark-2:     #1A1A1A;
+      --white:      #FFFFFF;
+      --gray:       #888888;
+      --gray-2:     #444444;
+      --border:     rgba(201,168,76,0.18);
+
+      --ff: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+      --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: var(--ff);
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ══ CURSOR ═══════════════════════════════════════════ */
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ══ NOISE ════════════════════════════════════════════ */
+    .noise {
+      position: fixed; inset: -50%;
+      width: 200%; height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 256px;
+      opacity: 0.5;
+      animation: noiseAnim 0.1s steps(1) infinite;
+      pointer-events: none;
+      z-index: 9990;
+    }
+    @keyframes noiseAnim {
+      0%   { transform: translate(0,0); }
+      20%  { transform: translate(-2%,-3%); }
+      40%  { transform: translate(3%,1%); }
+      60%  { transform: translate(-1%,4%); }
+      80%  { transform: translate(4%,-2%); }
+      100% { transform: translate(-3%,3%); }
+    }
+
+    /* ══ NAV ══════════════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      transition: background 0.4s, border-color 0.4s;
+    }
+    .nav.scrolled {
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav__back {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gray);
+      transition: color 0.3s;
+    }
+    .nav__back svg { width: 16px; height: 16px; transition: transform 0.3s; }
+    .nav__back:hover { color: var(--white); }
+    .nav__back:hover svg { transform: translateX(-4px); }
+
+    .nav__brand {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .nav__brand img { height: 32px; width: auto; }
+    .nav__brand-label {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+    .nav__brand-label span { display: block; color: rgba(255,255,255,0.4); font-weight: 500; font-size: 0.6rem; }
+
+    .nav__cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .nav__cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    /* ══ HERO ═════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 2.5rem 5rem;
+      overflow: hidden;
+    }
+
+    /* Eq bars background */
+    .hero__eq {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60vh;
+      display: flex; align-items: flex-end;
+      gap: 3px; padding: 0 2vw;
+      z-index: 1;
+    }
+    .hero__eq-bar {
+      flex: 1; max-width: 16px;
+      background: linear-gradient(to top, rgba(201,168,76,0.4) 0%, rgba(201,168,76,0.08) 60%, transparent 100%);
+      border-radius: 2px 2px 0 0;
+      transform-origin: bottom;
+    }
+
+    /* Gold vignette */
+    .hero__vignette {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 100% 60% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 80% at 50% 100%, rgba(8,8,8,0.9) 0%, transparent 80%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .hero__content { position: relative; z-index: 3; }
+
+    .hero__eyebrow {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+    }
+
+    .hero__title {
+      font-size: clamp(4rem, 14vw, 15rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      overflow: hidden;
+    }
+    .hero__title .word {
+      display: block; overflow: hidden;
+    }
+    .hero__title .word-inner {
+      display: block;
+      transform: translateY(110%);
+    }
+    .hero__title .word--gold .word-inner {
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero__desc {
+      margin-top: 2.5rem;
+      max-width: 560px;
+      font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+      opacity: 0; transform: translateY(20px);
+    }
+
+    .hero__actions {
+      display: flex; align-items: center; gap: 2rem;
+      margin-top: 2.5rem;
+      opacity: 0; transform: translateY(20px);
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 1rem 2rem;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(201,168,76,0.3);
+    }
+    .btn-ghost {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 2px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .btn-ghost:hover { color: var(--white); border-color: var(--white); }
+
+    .hero__scroll-hint {
+      position: absolute; bottom: 2rem; right: 2.5rem; z-index: 3;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      opacity: 0;
+    }
+    .hero__scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(1); opacity: 0.6; }
+      50% { transform: scaleY(0.5); opacity: 1; }
+    }
+    .hero__scroll-hint span {
+      font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gray); writing-mode: vertical-lr;
+    }
+
+    /* ══ SECTION BASE ═════════════════════════════════════ */
+    section { position: relative; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 2.5rem; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    /* ══ O QUE É ══════════════════════════════════════════ */
+    .oque {
+      padding: 10rem 0;
+      background: var(--dark);
+      overflow: hidden;
+    }
+    .oque__inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: center;
+    }
+    .oque__text { }
+    .oque__body {
+      margin-top: 2rem;
+      font-size: 1.15rem; line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+    }
+    .oque__body strong { color: var(--white); font-weight: 600; }
+
+    /* Graphic right side — animated ring */
+    .oque__graphic {
+      position: relative;
+      aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .oque__ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      animation: ringPulse 4s ease-in-out infinite;
+    }
+    .oque__ring:nth-child(1) { width: 90%; height: 90%; animation-delay: 0s; }
+    .oque__ring:nth-child(2) { width: 70%; height: 70%; animation-delay: 0.6s; border-color: rgba(201,168,76,0.3); }
+    .oque__ring:nth-child(3) { width: 50%; height: 50%; animation-delay: 1.2s; border-color: rgba(201,168,76,0.5); }
+    @keyframes ringPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.04); opacity: 1; }
+    }
+    .oque__center {
+      position: relative; z-index: 1;
+      width: 120px; height: 120px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 60px rgba(201,168,76,0.35);
+    }
+    .oque__center svg { width: 48px; height: 48px; color: var(--black); }
+
+    /* ══ BENEFÍCIOS ═══════════════════════════════════════ */
+    .beneficios {
+      padding: 8rem 0;
+      background: var(--black);
+    }
+    .beneficios__header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .beneficios__grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .ben-card {
+      background: var(--black);
+      padding: 2.5rem 2rem;
+      display: flex; flex-direction: column; gap: 1.2rem;
+      transition: background 0.3s;
+      overflow: hidden;
+      position: relative;
+    }
+    .ben-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform 0.5s var(--ease-expo);
+    }
+    .ben-card:hover { background: rgba(201,168,76,0.04); }
+    .ben-card:hover::after { transform: scaleX(1); }
+    .ben-card__icon {
+      width: 44px; height: 44px;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+    .ben-card__icon svg { width: 100%; height: 100%; }
+    .ben-card__num {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold-dark);
+    }
+    .ben-card__title {
+      font-size: 1rem; font-weight: 700;
+      line-height: 1.3; color: var(--white);
+    }
+    .ben-card__desc {
+      font-size: 0.82rem; line-height: 1.6;
+      color: rgba(255,255,255,0.4);
+      margin-top: auto;
+    }
+
+    /* ══ COMO FUNCIONA ════════════════════════════════════ */
+    .como {
+      background: var(--dark);
+      overflow: hidden;
+    }
+    .como__sticky-wrap {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+    .como__spacer { height: 400vh; }
+    .como__panel {
+      position: absolute; inset: 0;
+      display: flex; align-items: center;
+      padding: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .como__panel.is-active { opacity: 1; pointer-events: auto; }
+    .como__panel-inner {
+      max-width: 1280px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: center;
+    }
+    .como__step-num {
+      font-size: clamp(8rem, 20vw, 18rem);
+      font-weight: 900; line-height: 1;
+      letter-spacing: -0.06em;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0.25;
+      transform: translateX(-2rem);
+      transition: all 0.8s var(--ease-expo);
+    }
+    .como__panel.is-active .como__step-num { opacity: 0.25; transform: translateX(0); }
+    .como__step-content { }
+    .como__step-label {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.7s var(--ease-expo) 0.1s;
+    }
+    .como__panel.is-active .como__step-label { transform: translateY(0); opacity: 1; }
+    .como__step-title {
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.03em;
+      transform: translateY(30px); opacity: 0;
+      transition: all 0.8s var(--ease-expo) 0.15s;
+    }
+    .como__panel.is-active .como__step-title { transform: translateY(0); opacity: 1; }
+    .como__step-body {
+      margin-top: 1.5rem;
+      font-size: 1.1rem; line-height: 1.75;
+      color: rgba(255,255,255,0.55);
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.8s var(--ease-expo) 0.22s;
+    }
+    .como__panel.is-active .como__step-body { transform: translateY(0); opacity: 1; }
+
+    /* Progress dots */
+    .como__dots {
+      position: absolute; bottom: 3rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 0.5rem; z-index: 10;
+    }
+    .como__dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gray-2);
+      transition: background 0.3s, transform 0.3s;
+    }
+    .como__dot.is-active { background: var(--gold); transform: scale(1.5); }
+
+    /* ══ PLATAFORMA ═══════════════════════════════════════ */
+    .plataforma {
+      padding: 10rem 0;
+      background: var(--black);
+      overflow: hidden;
+    }
+    .plataforma__header {
+      text-align: center; margin-bottom: 5rem;
+    }
+    .plataforma__header .section-title {
+      max-width: 700px; margin: 0 auto;
+    }
+
+    /* Browser mockup (main animated dashboard) */
+    .browser {
+      max-width: 1000px; margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+      transform: translateY(60px); opacity: 0;
+    }
+    .pui {
+      background: #0D0D0D;
+      min-height: 500px;
+    }
+    .pui__nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: #111;
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+    }
+    .pui__nav-brand { display: flex; align-items: center; gap: 0.6rem; }
+    .pui__nav-logo {
+      width: 28px; height: 28px;
+      background: var(--gold);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; font-weight: 900; color: var(--black); letter-spacing: 0.05em;
+    }
+    .pui__nav-name { font-size: 0.7rem; font-weight: 700; color: var(--white); letter-spacing: 0.05em; }
+    .pui__nav-sub  { font-size: 0.55rem; color: var(--gold); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+    .pui__nav-links { display: flex; gap: 1.2rem; }
+    .pui__nav-link { font-size: 0.65rem; color: var(--gray); font-weight: 500; letter-spacing: 0.05em; }
+    .pui__nav-link.active { color: var(--white); }
+    .pui__nav-btn {
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.4rem 1rem; background: var(--gold); color: var(--black);
+      border-radius: 3px;
+    }
+    .pui__body { padding: 1.5rem; }
+    .pui__greeting { margin-bottom: 1.2rem; }
+    .pui__greeting h2 { font-size: 1.2rem; font-weight: 900; letter-spacing: -0.02em; }
+    .pui__greeting h2 span { color: var(--gold); }
+    .pui__greeting p { font-size: 0.72rem; color: var(--gray); margin-top: 0.2rem; }
+    .pui__card {
+      background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-light) 100%);
+      border-radius: 10px; padding: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.2rem;
+      overflow: hidden; position: relative;
+    }
+    .pui__card::after {
+      content: '✦';
+      position: absolute; right: 1.5rem; top: 50%;
+      transform: translateY(-50%);
+      font-size: 5rem; color: rgba(0,0,0,0.1); line-height: 1;
+    }
+    .pui__card-label { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(0,0,0,0.5); margin-bottom: 0.4rem; }
+    .pui__card-pts { font-size: 2.2rem; font-weight: 900; color: var(--black); letter-spacing: -0.04em; line-height: 1; }
+    .pui__card-pts span { font-size: 1rem; font-weight: 600; }
+    .pui__card-level { font-size: 0.62rem; color: rgba(0,0,0,0.6); margin-top: 0.3rem; }
+    .pui__card-bar { margin-top: 0.6rem; width: 180px; height: 3px; background: rgba(0,0,0,0.2); border-radius: 2px; }
+    .pui__card-bar-fill { height: 100%; width: 0; background: rgba(0,0,0,0.4); border-radius: 2px; transition: width 1s ease; }
+    .pui__card-actions { display: flex; flex-direction: column; gap: 0.5rem; z-index: 1; }
+    .pui__card-action { display: flex; align-items: center; gap: 0.4rem; font-size: 0.62rem; font-weight: 700; color: var(--black); background: rgba(0,0,0,0.12); padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; }
+
+    /* ── Screens showcase (real screenshots) ────────── */
+    .screens-showcase {
+      position: relative;
+      max-width: 1100px;
+      margin: 5rem auto 0;
+      height: 580px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Shared browser frame */
+    .screen-frame {
+      position: absolute;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.07);
+      will-change: transform, opacity;
+    }
+    .screen-frame--home {
+      width: 64%;
+      left: 0;
+      top: 50%;
+      z-index: 1;
+    }
+    .screen-frame--perfil {
+      width: 58%;
+      right: 0;
+      top: 50%;
+      z-index: 2;
+    }
+
+    .browser__bar {
+      background: #1C1C1E;
+      padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .browser__dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .browser__dot:nth-child(1) { background: #FF5F57; }
+    .browser__dot:nth-child(2) { background: #FEBC2E; }
+    .browser__dot:nth-child(3) { background: #28C840; }
+    .browser__url {
+      flex: 1; margin: 0 0.8rem;
+      background: rgba(255,255,255,0.07);
+      border-radius: 4px;
+      padding: 0.28rem 0.8rem;
+      font-size: 0.68rem; color: rgba(255,255,255,0.45);
+      letter-spacing: 0.02em;
+      text-align: center;
+      font-family: ui-monospace, monospace;
+    }
+
+    .screen-frame__img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: none;
+    }
+
+    /* Glow behind the screens */
+    .screens-showcase::before {
+      content: '';
+      position: absolute;
+      inset: 10% 5%;
+      background: radial-gradient(ellipse at 40% 50%, rgba(201,168,76,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Label chips below screens */
+    .screens-labels {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 2.5rem auto 0;
+      padding: 0 2rem;
+    }
+    .screens-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .screens-label span {
+      display: block;
+      font-size: 0.58rem;
+      color: var(--gray);
+      letter-spacing: 0.1em;
+      margin-top: 0.2rem;
+      text-transform: none;
+    }
+    .pui__card-bar-fill { height: 100%; width: 0%; background: var(--black); border-radius: 2px; transition: width 1.5s var(--ease-expo); }
+    .pui__card-actions { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; position: relative; z-index: 1; }
+    .pui__card-action { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; color: var(--black); display: flex; align-items: center; gap: 0.3rem; }
+
+    /* Quick actions */
+    .pui__section-title { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .pui__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.2rem; }
+    .pui__quick {
+      background: #1A1A1A; border-radius: 7px; padding: 0.8rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.04);
+      transform: translateY(20px); opacity: 0;
+    }
+    .pui__quick-icon { width: 28px; height: 28px; background: rgba(201,168,76,0.12); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .pui__quick-icon svg { width: 14px; height: 14px; color: var(--gold); }
+    .pui__quick-text { }
+    .pui__quick-name { font-size: 0.62rem; font-weight: 700; color: var(--white); line-height: 1.2; }
+    .pui__quick-sub  { font-size: 0.55rem; color: var(--gray); }
+
+    /* ══ PARA TODOS ═══════════════════════════════════════ */
+    .para-todos {
+      background: var(--dark);
+      overflow: hidden;
+    }
+    .para-todos__header {
+      padding: 8rem 2.5rem 5rem;
+      max-width: 1280px; margin: 0 auto;
+      text-align: center;
+    }
+    .para-todos__grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+    }
+    .pt-panel {
+      position: relative;
+      padding: 5rem 3rem 6rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .pt-panel:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.06); }
+    .pt-panel__bg {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .pt-panel:nth-child(1) .pt-panel__bg { background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(201,168,76,0.08) 0%, transparent 70%); }
+    .pt-panel:nth-child(2) .pt-panel__bg { background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 70%); }
+    .pt-panel:nth-child(3) .pt-panel__bg { background: radial-gradient(ellipse 80% 60% at 100% 50%, rgba(201,168,76,0.08) 0%, transparent 70%); }
+    .pt-panel:hover .pt-panel__bg { opacity: 1; }
+    .pt-panel__tag {
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      position: relative; z-index: 1;
+    }
+    .pt-panel__who {
+      font-size: clamp(2rem, 3vw, 3rem);
+      font-weight: 900; line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+      position: relative; z-index: 1;
+    }
+    .pt-panel__body {
+      font-size: 0.95rem; line-height: 1.8;
+      color: rgba(255,255,255,0.55);
+      position: relative; z-index: 1;
+    }
+    .pt-panel__icon {
+      position: absolute; bottom: 2rem; right: 2rem;
+      width: 48px; height: 48px;
+      color: rgba(201,168,76,0.15);
+    }
+    .pt-panel__icon svg { width: 100%; height: 100%; }
+
+    /* ══ RESULTADO ════════════════════════════════════════ */
+    .resultado {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 6rem 2.5rem;
+      background: var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+    .resultado__bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201,168,76,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .resultado__label {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 2rem;
+      opacity: 0; transform: translateY(20px);
+    }
+    .resultado__text {
+      font-size: clamp(1.8rem, 4vw, 4rem);
+      font-weight: 900; line-height: 1.15;
+      letter-spacing: -0.03em;
+      max-width: 900px;
+      overflow: hidden;
+    }
+    .resultado__line {
+      display: block; overflow: hidden;
+    }
+    .resultado__line-inner {
+      display: block;
+      transform: translateY(110%);
+    }
+    .resultado__line--gold .resultado__line-inner {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .resultado__cta {
+      margin-top: 4rem;
+      display: flex; align-items: center; gap: 1.5rem;
+      opacity: 0; transform: translateY(20px);
+    }
+
+    /* ══ TICKER ═══════════════════════════════════════════ */
+    .ticker {
+      overflow: hidden;
+      padding: 1rem 0;
+      background: rgba(201,168,76,0.05);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .ticker__track {
+      display: inline-flex; gap: 2.5rem;
+      white-space: nowrap;
+      animation: tickerScroll 20s linear infinite;
+    }
+    .ticker__track span { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.6); }
+    .ticker__track .sep { color: rgba(201,168,76,0.25); }
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ══ RESPONSIVE ═══════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .oque__inner { grid-template-columns: 1fr; }
+      .oque__graphic { max-width: 300px; margin: 0 auto; }
+      .beneficios__grid { grid-template-columns: repeat(3, 1fr); }
+      .como__panel-inner { grid-template-columns: 1fr; }
+      .como__step-num { font-size: clamp(6rem, 15vw, 12rem); }
+      .para-todos__grid { grid-template-columns: 1fr; }
+      .pt-panel:not(:last-child) { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .pui__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .beneficios__grid { grid-template-columns: 1fr 1fr; }
+      .nav { padding: 1rem 1.5rem; }
+      .hero { padding: 0 1.5rem 4rem; }
+      .container { padding: 0 1.5rem; }
+      .resultado__text { font-size: clamp(1.5rem, 7vw, 2.5rem); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="noise" aria-hidden="true"></div>
+  <div class="cursor"     id="cursor"    ></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ══ NAV ══════════════════════════════════════════════ -->
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav__back">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Voltar
+    </a>
+    <div class="nav__brand">
+      <img src="assets/images/new-hit-logo.png" alt="HIT" />
+      <div class="nav__brand-label">
+        Nexus Club
+        <span>by HIT Music Business</span>
+      </div>
+    </div>
+    <a href="https://wa.me/5511943300077" target="_blank" rel="noopener" class="nav__cta">Entrar no Clube</a>
+  </nav>
+
+  <!-- ══ HERO ══════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__eq" id="heroEq" aria-hidden="true"></div>
+    <div class="hero__vignette"></div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow" id="heroEyebrow">HIT | NEXUS CLUB</p>
+      <h1 class="hero__title">
+        <span class="word"><span class="word-inner">NEXUS</span></span>
+        <span class="word word--gold"><span class="word-inner">CLUB.</span></span>
+      </h1>
+      <p class="hero__desc" id="heroDesc">
+        Um programa de fidelização que transforma fãs de sertanejo, rodeios
+        e outros estilos em uma <strong>comunidade exclusiva</strong>.
+        Quanto mais o fã interage, mais pontos acumula para trocar por
+        experiências inesquecíveis.
+      </p>
+      <div class="hero__actions" id="heroActions">
+        <a href="https://wa.me/5511943300077" target="_blank" rel="noopener" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Faça Parte do Clube
+        </a>
+        <a href="#como" class="btn-ghost">Como Funciona</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll-hint" id="heroScrollHint">
+      <div class="hero__scroll-line"></div>
+      <span>scroll</span>
+    </div>
+  </section>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker__track">
+      <span>Exclusividade</span><span class="sep">✦</span>
+      <span>Comunidade</span><span class="sep">✦</span>
+      <span>Pontos</span><span class="sep">✦</span>
+      <span>Meet &amp; Greet</span><span class="sep">✦</span>
+      <span>Ingressos VIP</span><span class="sep">✦</span>
+      <span>Artistas</span><span class="sep">✦</span>
+      <span>Experiências</span><span class="sep">✦</span>
+      <span>Nexus Club</span><span class="sep">✦</span>
+      <span>Exclusividade</span><span class="sep">✦</span>
+      <span>Comunidade</span><span class="sep">✦</span>
+      <span>Pontos</span><span class="sep">✦</span>
+      <span>Meet &amp; Greet</span><span class="sep">✦</span>
+      <span>Ingressos VIP</span><span class="sep">✦</span>
+      <span>Artistas</span><span class="sep">✦</span>
+      <span>Experiências</span><span class="sep">✦</span>
+      <span>Nexus Club</span><span class="sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ══ O QUE É ═══════════════════════════════════════════ -->
+  <section class="oque" id="oque">
+    <div class="container">
+      <div class="oque__inner">
+        <div class="oque__text">
+          <span class="section-label reveal-el">O que é</span>
+          <h2 class="section-title reveal-el">
+            Fãs que<br>se tornam<br><em style="color:var(--gold);font-style:normal">comunidade.</em>
+          </h2>
+          <p class="oque__body reveal-el">
+            O Nexus Club transforma cada interação com a HIT em <strong>pontos reais</strong>.
+            Vai a shows, compra produtos, participa de eventos — e acumula para resgatar
+            experiências que nenhum dinheiro compra diretamente:
+            encontros com artistas, ingressos VIP, acesso aos bastidores.
+          </p>
+        </div>
+        <div class="oque__graphic reveal-el">
+          <div class="oque__ring"></div>
+          <div class="oque__ring"></div>
+          <div class="oque__ring"></div>
+          <div class="oque__center">
+            <!-- Star/music icon -->
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BENEFÍCIOS ═════════════════════════════════════════ -->
+  <section class="beneficios" id="beneficios">
+    <div class="container">
+      <div class="beneficios__header">
+        <div>
+          <span class="section-label reveal-el">Benefícios</span>
+          <h2 class="section-title reveal-el">O que você ganha.</h2>
+        </div>
+      </div>
+      <div class="beneficios__grid">
+
+        <div class="ben-card reveal-el">
+          <div class="ben-card__icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M15 3H9a2 2 0 0 0-2 2v14l7-3 7 3V5a2 2 0 0 0-2-2z"/>
+            </svg>
+          </div>
+          <div class="ben-card__num">01</div>
+          <div class="ben-card__title">Acesso exclusivo aos melhores shows</div>
+          <div class="ben-card__desc">Sertanejo, rodeios e muito mais. Você entra antes de todo mundo.</div>
+        </div>
+
+        <div class="ben-card reveal-el">
+          <div class="ben-card__icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+          </div>
+          <div class="ben-card__num">02</div>
+          <div class="ben-card__title">Produtos exclusivos do clube</div>
+          <div class="ben-card__desc">Coleções limitadas que não chegam ao público geral.</div>
+        </div>
+
+        <div class="ben-card reveal-el">
+          <div class="ben-card__icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <div class="ben-card__num">03</div>
+          <div class="ben-card__title">Encontros com artistas</div>
+          <div class="ben-card__desc">Acesso aos bastidores e momentos que ficam na memória.</div>
+        </div>
+
+        <div class="ben-card reveal-el">
+          <div class="ben-card__icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <div class="ben-card__num">04</div>
+          <div class="ben-card__title">Meet &amp; Greet pessoal</div>
+          <div class="ben-card__desc">Foto, papo, história. Aquele momento que não tem preço.</div>
+        </div>
+
+        <div class="ben-card reveal-el">
+          <div class="ben-card__icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/>
+              <path d="M12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>
+            </svg>
+          </div>
+          <div class="ben-card__num">05</div>
+          <div class="ben-card__title">Troque pontos por experiências</div>
+          <div class="ben-card__desc">Seu engajamento vira prêmios reais. Cada ponto conta.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ COMO FUNCIONA ══════════════════════════════════════ -->
+  <div class="como" id="como">
+    <div class="como__spacer">
+      <div class="como__sticky-wrap" id="comoSticky">
+
+        <div class="como__panel" id="comoPanel1">
+          <div class="como__panel-inner container">
+            <div class="como__step-num">01</div>
+            <div class="como__step-content">
+              <div class="como__step-label">Primeiro passo</div>
+              <h2 class="como__step-title">Cadastre-se.<br>É muito fácil.</h2>
+              <p class="como__step-body">
+                Crie sua conta em segundos usando sua conta Google ou Apple.
+                Pronto — você já está dentro. Nada de formulário longo, nada complicado.
+                Em 30 segundos você faz parte da comunidade.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="como__panel" id="comoPanel2">
+          <div class="como__panel-inner container">
+            <div class="como__step-num">02</div>
+            <div class="como__step-content">
+              <div class="como__step-label">Segundo passo</div>
+              <h2 class="como__step-title">Curta.<br>Ganhe pontos.</h2>
+              <p class="como__step-body">
+                Cada ação te dá pontos: assistir shows, comprar produtos do clube,
+                participar de eventos, indicar amigos. Quanto mais você curte a HIT,
+                mais pontos acumula. É simples assim.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="como__panel" id="comoPanel3">
+          <div class="como__panel-inner container">
+            <div class="como__step-num">03</div>
+            <div class="como__step-content">
+              <div class="como__step-label">Terceiro passo</div>
+              <h2 class="como__step-title">Resgate.<br>Viva a experiência.</h2>
+              <p class="como__step-body">
+                Troque seus pontos por ingressos VIP, produtos exclusivos,
+                encontros com artistas ou um meet &amp; greet pessoal.
+                Experiências que nenhum dinheiro compra diretamente.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="como__dots">
+          <div class="como__dot" id="dot1"></div>
+          <div class="como__dot" id="dot2"></div>
+          <div class="como__dot" id="dot3"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PLATAFORMA ═════════════════════════════════════════ -->
+  <section class="plataforma" id="plataforma">
+    <div class="container">
+      <div class="plataforma__header">
+        <span class="section-label reveal-el">A Plataforma</span>
+        <h2 class="section-title reveal-el">Uma experiência completa<br>para fãs e marcas.</h2>
+      </div>
+
+      <!-- Live browser mockup -->
+      <div class="browser" id="browser">
+        <div class="browser__bar">
+          <div class="browser__dot"></div>
+          <div class="browser__dot"></div>
+          <div class="browser__dot"></div>
+          <div class="browser__url">nexusclub.hit.com.br/dashboard</div>
+        </div>
+        <div class="pui">
+          <!-- Platform nav -->
+          <div class="pui__nav">
+            <div class="pui__nav-brand">
+              <div class="pui__nav-logo">HIT</div>
+              <div>
+                <div class="pui__nav-name">NEXUS CLUB</div>
+                <div class="pui__nav-sub">by HIT</div>
+              </div>
+            </div>
+            <div class="pui__nav-links">
+              <span class="pui__nav-link active">Dashboard</span>
+              <span class="pui__nav-link">Prêmios</span>
+              <span class="pui__nav-link">Perfil</span>
+            </div>
+            <div class="pui__nav-btn">Minha Conta</div>
+          </div>
+
+          <!-- Platform body -->
+          <div class="pui__body">
+            <div class="pui__greeting">
+              <h2>Olá, <span>JOÃO SILVA</span>!</h2>
+              <p>Bem-vindo de volta ao Nexus Club</p>
+            </div>
+
+            <!-- Points card -->
+            <div class="pui__card">
+              <div>
+                <div class="pui__card-label">Saldo Disponível</div>
+                <div class="pui__card-pts">
+                  <span id="ptsCounter">0</span> <span>pontos</span>
+                </div>
+                <div class="pui__card-level">Nível: Nexus Prata</div>
+                <div class="pui__card-bar">
+                  <div class="pui__card-bar-fill" id="cardBarFill"></div>
+                </div>
+                <div style="font-size:0.55rem;color:rgba(0,0,0,0.5);margin-top:0.25rem">Faltam 2.150 pontos para Ouro</div>
+              </div>
+              <div class="pui__card-actions">
+                <div class="pui__card-action">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/></svg>
+                  Resgatar Pontos
+                </div>
+                <div class="pui__card-action">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 7l-10 13L2 7"/></svg>
+                  Ganhar Mais Pontos
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="pui__section-title">Ações Rápidas</div>
+            <div class="pui__grid">
+              <div class="pui__quick" id="qa1">
+                <div class="pui__quick-icon">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/></svg>
+                </div>
+                <div class="pui__quick-text">
+                  <div class="pui__quick-name">Resgatar Prêmios</div>
+                  <div class="pui__quick-sub">Ver catálogo</div>
+                </div>
+              </div>
+              <div class="pui__quick" id="qa2">
+                <div class="pui__quick-icon">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="pui__quick-text">
+                  <div class="pui__quick-name">Ver Extrato</div>
+                  <div class="pui__quick-sub">Histórico</div>
+                </div>
+              </div>
+              <div class="pui__quick" id="qa3">
+                <div class="pui__quick-icon">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="pui__quick-text">
+                  <div class="pui__quick-name">Editar Perfil</div>
+                  <div class="pui__quick-sub">Seus dados</div>
+                </div>
+              </div>
+              <div class="pui__quick" id="qa4">
+                <div class="pui__quick-icon">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                </div>
+                <div class="pui__quick-text">
+                  <div class="pui__quick-name">Cartão Virtual</div>
+                  <div class="pui__quick-sub">Seu cartão</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real screenshot showcase -->
+      <div class="screens-showcase" id="screensShowcase">
+
+        <div class="screen-frame screen-frame--home" id="screenHome">
+          <div class="browser__bar">
+            <div class="browser__dot"></div>
+            <div class="browser__dot"></div>
+            <div class="browser__dot"></div>
+            <div class="browser__url">nexusclub.hit.com.br</div>
+          </div>
+          <img class="screen-frame__img" src="assets/images/home-nexus.png" alt="Nexus Club — página inicial" />
+        </div>
+
+        <div class="screen-frame screen-frame--perfil" id="screenPerfil">
+          <div class="browser__bar">
+            <div class="browser__dot"></div>
+            <div class="browser__dot"></div>
+            <div class="browser__dot"></div>
+            <div class="browser__url">nexusclub.hit.com.br/perfil</div>
+          </div>
+          <img class="screen-frame__img" src="assets/images/perfil-nexus.png" alt="Nexus Club — dashboard do membro" />
+        </div>
+
+      </div>
+
+      <!-- Labels below screenshots -->
+      <div class="screens-labels">
+        <div class="screens-label" id="labelHome">
+          Página Inicial
+          <span>Experiência do fã</span>
+        </div>
+        <div class="screens-label" id="labelPerfil">
+          Dashboard do Membro
+          <span>Pontos, prêmios & perfil</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ PARA TODOS ═════════════════════════════════════════ -->
+  <section class="para-todos" id="para-todos">
+    <div class="para-todos__header">
+      <span class="section-label reveal-el">Por que isso é bom para todos</span>
+      <h2 class="section-title reveal-el">Três lados.<br>Todo mundo ganha.</h2>
+    </div>
+    <div class="para-todos__grid">
+
+      <div class="pt-panel reveal-el">
+        <div class="pt-panel__bg"></div>
+        <div class="pt-panel__tag">Para os Fãs</div>
+        <div class="pt-panel__who">Você é<br>VIP.</div>
+        <div class="pt-panel__body">
+          Você não é só um cliente — você é parte de uma comunidade.
+          Ganha recompensas reais, acesso exclusivo a shows e artistas,
+          e se sente valorizado. É como ser VIP sem pagar extra por isso.
+        </div>
+        <div class="pt-panel__icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+      </div>
+
+      <div class="pt-panel reveal-el">
+        <div class="pt-panel__bg"></div>
+        <div class="pt-panel__tag">Para a HIT</div>
+        <div class="pt-panel__who">Dados<br>&amp; lealdade.</div>
+        <div class="pt-panel__body">
+          Fãs mais engajados = comunidade mais forte.
+          Você consegue dados sobre o que seus clientes realmente gostam,
+          cria relacionamento de longo prazo, e transforma fãs ocasionais
+          em superfãs.
+        </div>
+        <div class="pt-panel__icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+      </div>
+
+      <div class="pt-panel reveal-el">
+        <div class="pt-panel__bg"></div>
+        <div class="pt-panel__tag">Para o Negócio</div>
+        <div class="pt-panel__who">Receita<br>recorrente.</div>
+        <div class="pt-panel__body">
+          Um programa de fidelização bem feito aumenta a retenção de clientes,
+          gera mais compras, e cria buzz nas redes sociais.
+          Fãs felizes viram embaixadores da marca.
+        </div>
+        <div class="pt-panel__icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ RESULTADO ══════════════════════════════════════════ -->
+  <section class="resultado" id="resultado">
+    <div class="resultado__bg"></div>
+    <p class="resultado__label" id="resLabel">O Resultado</p>
+    <div class="resultado__text">
+      <span class="resultado__line"><span class="resultado__line-inner">Uma comunidade</span></span>
+      <span class="resultado__line resultado__line--gold"><span class="resultado__line-inner">engajada, leal</span></span>
+      <span class="resultado__line"><span class="resultado__line-inner">e crescente.</span></span>
+    </div>
+    <p style="margin-top:1.5rem;font-size:1rem;color:rgba(255,255,255,0.4);max-width:500px;text-align:center;opacity:0;transform:translateY(16px)" id="resTodosText">
+      Todos ganham. Com a HIT.
+    </p>
+    <div class="resultado__cta" id="resCta">
+      <a href="#hero" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Entrar no Nexus Club
+      </a>
+      <a href="index.html" class="btn-ghost">Conhecer a HIT</a>
+    </div>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger)
+
+    /* ── Cursor ──────────────────────────────────────── */
+    const cursor    = document.getElementById('cursor')
+    const cursorRing = document.getElementById('cursorRing')
+    let mx = 0, my = 0, rx = 0, ry = 0
+
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY
+      gsap.to(cursor, { x: mx, y: my, duration: 0.1, ease: 'power2.out' })
+    })
+    gsap.ticker.add(() => {
+      rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1
+      gsap.set(cursorRing, { x: rx, y: ry })
+    })
+    document.querySelectorAll('a, button, .ben-card, .pt-panel').forEach(el => {
+      el.addEventListener('mouseenter', () => gsap.to(cursorRing, { scale: 2, opacity: 0.5, duration: 0.3 }))
+      el.addEventListener('mouseleave', () => gsap.to(cursorRing, { scale: 1, opacity: 1,   duration: 0.3 }))
+    })
+
+    /* ── Nav scrolled ───────────────────────────────── */
+    ScrollTrigger.create({
+      start: 'top -60px',
+      onUpdate: self => document.getElementById('nav').classList.toggle('scrolled', self.progress > 0)
+    })
+
+    /* ── Hero eq bars ───────────────────────────────── */
+    const eqEl = document.getElementById('heroEq')
+    for (let i = 0; i < 64; i++) {
+      const b = document.createElement('div')
+      b.className = 'hero__eq-bar'
+      const h = 8 + Math.random() * 20
+      b.style.height = h + '%'
+      eqEl.appendChild(b)
+      gsap.timeline({ repeat: -1, yoyo: true, delay: Math.random() * 2 })
+        .to(b, { height: (20 + Math.random() * 60) + '%', duration: 0.3 + Math.random() * 0.8, ease: 'sine.inOut' })
+    }
+
+    /* ── Hero entrance ──────────────────────────────── */
+    const heroTl = gsap.timeline({ delay: 0.2 })
+    heroTl
+      .to('.word-inner', { y: '0%', duration: 1.2, ease: 'expo.out', stagger: 0.12 })
+      .to('#heroEyebrow', { opacity: 1, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .to('#heroDesc',    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+      .to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.3')
+      .to('#heroScrollHint', { opacity: 1, duration: 0.6 }, '-=0.1')
+
+    /* ── Generic reveal ─────────────────────────────── */
+    document.querySelectorAll('.reveal-el').forEach((el, i) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          delay: (i % 4) * 0.08,
+        }
+      )
+    })
+
+    /* ── Como Funciona — pinned steps ───────────────── */
+    const panels = [
+      document.getElementById('comoPanel1'),
+      document.getElementById('comoPanel2'),
+      document.getElementById('comoPanel3'),
+    ]
+    const dots = [
+      document.getElementById('dot1'),
+      document.getElementById('dot2'),
+      document.getElementById('dot3'),
+    ]
+
+    function showStep(idx) {
+      panels.forEach((p, i) => {
+        p.classList.toggle('is-active', i === idx)
+      })
+      dots.forEach((d, i) => {
+        d.classList.toggle('is-active', i === idx)
+      })
+    }
+    showStep(0)
+
+    ScrollTrigger.create({
+      trigger: '.como',
+      start: 'top top',
+      end: 'bottom bottom',
+      pin: '.como__sticky-wrap',
+      scrub: true,
+      onUpdate: self => {
+        const p = self.progress
+        if      (p < 0.33) showStep(0)
+        else if (p < 0.66) showStep(1)
+        else               showStep(2)
+      }
+    })
+
+    /* ── Browser mockup ─────────────────────────────── */
+    const browser = document.getElementById('browser')
+    const ptsCounterEl = document.getElementById('ptsCounter')
+    const barFillEl = document.getElementById('cardBarFill')
+    const qaEls = [
+      document.getElementById('qa1'),
+      document.getElementById('qa2'),
+      document.getElementById('qa3'),
+      document.getElementById('qa4'),
+    ]
+
+    ScrollTrigger.create({
+      trigger: browser,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.to(browser, { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' })
+
+        setTimeout(() => {
+          let count = 0
+          const target = 7850
+          const step = target / 60
+          const interval = setInterval(() => {
+            count = Math.min(count + step, target)
+            ptsCounterEl.textContent = Math.floor(count).toLocaleString('pt-BR')
+            if (count >= target) clearInterval(interval)
+          }, 16)
+
+          barFillEl.style.width = '78%'
+
+          gsap.to(qaEls, {
+            opacity: 1, y: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            stagger: 0.1,
+            delay: 0.3,
+          })
+        }, 400)
+      }
+    })
+
+    /* ── Screens showcase (real screenshots) ────────── */
+    const screenHome   = document.getElementById('screenHome')
+    const screenPerfil = document.getElementById('screenPerfil')
+    const labelHome    = document.getElementById('labelHome')
+    const labelPerfil  = document.getElementById('labelPerfil')
+
+    gsap.set(screenHome,   { yPercent: -50, rotation: -4, x: -60, opacity: 0 })
+    gsap.set(screenPerfil, { yPercent: -50, rotation:  3, x:  60, opacity: 0 })
+
+    ScrollTrigger.create({
+      trigger: '#screensShowcase',
+      start: 'top 75%',
+      once: true,
+      onEnter: () => {
+        gsap.to(screenHome, {
+          opacity: 1, rotation: -2, x: 0,
+          duration: 1.3, ease: 'expo.out',
+        })
+        gsap.to(screenPerfil, {
+          opacity: 1, rotation: 1.5, x: 0,
+          duration: 1.3, ease: 'expo.out', delay: 0.2,
+        })
+        gsap.to([labelHome, labelPerfil], {
+          opacity: 1, y: 0,
+          duration: 0.8, ease: 'power3.out',
+          stagger: 0.14, delay: 0.55,
+        })
+      }
+    })
+
+    screenHome.addEventListener('mouseenter', () => {
+      gsap.to(screenHome,   { y: -10, scale: 1.02, duration: 0.45, ease: 'power2.out', overwrite: 'auto' })
+      gsap.to(screenPerfil, { y:   5, scale: 0.97, duration: 0.45, ease: 'power2.out', overwrite: 'auto' })
+    })
+    screenHome.addEventListener('mouseleave', () => {
+      gsap.to(screenHome,   { y: 0, scale: 1, duration: 0.6, ease: 'power2.out', overwrite: 'auto' })
+      gsap.to(screenPerfil, { y: 0, scale: 1, duration: 0.6, ease: 'power2.out', overwrite: 'auto' })
+    })
+    screenPerfil.addEventListener('mouseenter', () => {
+      gsap.to(screenPerfil, { y: -10, scale: 1.02, zIndex: 3, duration: 0.45, ease: 'power2.out', overwrite: 'auto' })
+      gsap.to(screenHome,   { y:   5, scale: 0.97,            duration: 0.45, ease: 'power2.out', overwrite: 'auto' })
+    })
+    screenPerfil.addEventListener('mouseleave', () => {
+      gsap.to(screenPerfil, { y: 0, scale: 1, duration: 0.6, ease: 'power2.out', overwrite: 'auto' })
+      gsap.to(screenHome,   { y: 0, scale: 1, duration: 0.6, ease: 'power2.out', overwrite: 'auto' })
+    })
+
+    /* ── Resultado text reveal ──────────────────────── */
+    gsap.to('#resLabel', {
+      opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: '.resultado', start: 'top 70%' }
+    })
+
+    gsap.to('.resultado__line-inner', {
+      y: '0%', duration: 1.1, ease: 'expo.out', stagger: 0.15,
+      scrollTrigger: { trigger: '.resultado', start: 'top 65%' }
+    })
+
+    gsap.to('#resTodosText', {
+      opacity: 1, y: 0, duration: 0.8, delay: 0.5,
+      scrollTrigger: { trigger: '.resultado', start: 'top 60%' }
+    })
+
+    gsap.to('#resCta', {
+      opacity: 1, y: 0, duration: 0.8, delay: 0.8,
+      scrollTrigger: { trigger: '.resultado', start: 'top 60%' }
+    })
+  </script>
+</body>
+</html>
