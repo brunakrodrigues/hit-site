@@ -341,7 +341,11 @@ body.cursor--hover .cursor-follower { opacity: 0; }
   font-size: 0.68rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.18);
+  background: linear-gradient(135deg, var(--color-accent-2) 0%, var(--color-accent) 50%, var(--color-accent-3) 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+          color: transparent;
   opacity: 0;
   transform: translateY(8px);
 }
