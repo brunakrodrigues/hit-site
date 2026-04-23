@@ -1224,9 +1224,9 @@ eqBars.forEach((bar, i) => {
       return ((seed >>> 1) / 0x7FFFFFFF)
     }
 
-    const MIN_D2 = 0.75 * 0.75   // distância mínima → evita repetir o mesh
-    const MAX_D2 = 2.3 * 2.3     // evita cordas antipodais estranhas
-    const TARGET = 55
+    const MIN_D2 = 0.9 * 0.9     // distância mínima → evita repetir o mesh
+    const MAX_D2 = 2.0 * 2.0     // evita cordas antipodais estranhas
+    const TARGET = 14
     const seen = new Set()
     let attempts = 0
     while (COUNTRY_LINKS.length < TARGET && attempts < TARGET * 40) {
@@ -1345,16 +1345,22 @@ eqBars.forEach((bar, i) => {
 
     ctx.clearRect(0, 0, W, H)
 
-    // ── Desenhar linhas (conexões) — mar mais suave, terra mais visível ──
-    ctx.lineWidth = 0.5
+    // ── Desenhar linhas (conexões) — terra clara e destacada, mar quase invisível ──
     for (let k = 0; k < connections.length; k++) {
       const [i, j] = connections[k]
       const a = proj[i], b = proj[j]
       const zAvg = (a.z + b.z) * 0.5
       if (zAvg < -0.3) continue
       const bothLand = points[i].land && points[j].land
-      const alpha = bothLand ? 0.42 : 0.14
-      ctx.strokeStyle = goldColor(zAvg, alpha)
+      if (!bothLand) {
+        // mar: ignora quase tudo, deixa só uma neblina sutil
+        if ((i + j) % 3 !== 0) continue
+        ctx.lineWidth = 0.4
+        ctx.strokeStyle = goldColor(zAvg, 0.06)
+      } else {
+        ctx.lineWidth = 0.7
+        ctx.strokeStyle = goldColor(zAvg, 0.65)
+      }
       ctx.beginPath()
       ctx.moveTo(a.x, a.y)
       ctx.lineTo(b.x, b.y)
@@ -1379,8 +1385,8 @@ eqBars.forEach((bar, i) => {
     for (let i = 0; i < points.length; i++) {
       const p = proj[i]
       const isLandPt = points[i].land
-      const size = (0.8 + (p.z + 1) * 1.15) * (isLandPt ? 1 : 0.7)
-      const alpha = isLandPt ? 0.95 : 0.32
+      const size = isLandPt ? (1.2 + (p.z + 1) * 1.3) : (0.5 + (p.z + 1) * 0.6)
+      const alpha = isLandPt ? 1.0 : 0.15
       ctx.fillStyle = goldColor(p.z, alpha)
       ctx.beginPath()
       ctx.arc(p.x, p.y, size, 0, Math.PI * 2)
