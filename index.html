@@ -164,6 +164,16 @@
       </div>
     </div>
 
+    <!-- CAMADA 3.5: Imagens de scrollytelling (uma por frase) -->
+    <div class="hero__st-images" id="heroStImages" aria-hidden="true">
+      <img src="assets/images/1PPT HIT INSTITUCIONAL.pptx.jpg" alt="" class="hero__st-img" data-index="0" />
+      <img src="assets/images/2PPT HIT INSTITUCIONAL.pptx.jpg" alt="" class="hero__st-img" data-index="1" />
+      <img src="assets/images/3PPT HIT INSTITUCIONAL.pptx.jpg" alt="" class="hero__st-img" data-index="2" />
+      <img src="assets/images/4PPT HIT INSTITUCIONAL.pptx.jpg" alt="" class="hero__st-img" data-index="3" />
+      <img src="assets/images/5PPT HIT INSTITUCIONAL.pptx.jpg" alt="" class="hero__st-img" data-index="4" />
+      <div class="hero__st-images-overlay"></div>
+    </div>
+
     <!-- CAMADA 4: Scrollytelling — frases que aparecem ao rolar -->
     <div class="hero__scrolltell" id="heroScrolltell" aria-hidden="true">
       <p class="hero__st-phrase" data-index="0">A música conta a história das pessoas.</p>
@@ -542,7 +552,7 @@
         <!-- Lado esquerdo: badge + headline -->
         <div class="anos18-left">
           <div class="anos18-badge">
-            <img src="assets/images/hit-18anos.png" alt="HIT Music Business — 18 Anos" />
+            <img src="assets/images/new-hit-logo.png" alt="HIT Music Business" />
           </div>
           <p class="anos18-tagline reveal-text">
             Dezoito anos<br>
@@ -595,12 +605,27 @@
   </section>
 
   <!-- ============================================================
+       FAIXA — FRASE DE IMPACTO
+  ============================================================ -->
+  <section class="faixa-impacto" id="faixa-impacto">
+    <div class="container">
+      <p class="faixa-impacto__text">Criar experiências que marcam a vida das pessoas.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
        TRANSFORMAÇÃO
   ============================================================ -->
   <section class="transformacao" id="transformacao">
 
     <!-- Fundo com textura sutil -->
     <div class="tf__bg" aria-hidden="true"></div>
+
+    <!-- Globo animado (lado direito) — canvas com pontos/linhas -->
+    <div class="tf__globe" aria-hidden="true">
+      <div class="tf__globe-glow"></div>
+      <canvas class="tf__globe-canvas" id="tfGlobeCanvas"></canvas>
+    </div>
 
     <div class="container">
 
@@ -609,7 +634,7 @@
         <span class="section-label reveal-text">Transformação</span>
         <h2 class="tf__title">
           <span class="tf__title-line reveal-line-dark">O efeito</span>
-          <span class="tf__title-line tf__title-line--gold reveal-line-dark">HIT.</span>
+          <span class="tf__title-line tf__title-line--gold reveal-line-dark"><img src="assets/images/new-hit-logo.png" alt="HIT" class="tf__title-logo" />.</span>
         </h2>
       </div>
 
@@ -744,7 +769,7 @@
             <div class="sim__placeholder" id="simPlaceholder">
               <div class="sim__placeholder-icon">
                 <svg viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="24" r="23" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+                  <circle cx="24" cy="24" r="23" stroke="rgba(228,192,121,0.2)" stroke-width="1"/>
                   <path d="M16 24 L24 16 L32 24 L24 32 Z" stroke="var(--color-accent)" stroke-width="1.5" fill="none"/>
                   <circle cx="24" cy="24" r="3" fill="var(--color-accent)" opacity="0.5"/>
                 </svg>
@@ -902,6 +927,7 @@
       <div class="footer__top">
         <div class="footer__top-left">
           <img src="assets/images/new-hit-logo.png" alt="HIT Music Business" class="footer__logo-img" />
+          <img src="assets/images/hit-18anos.png" alt="HIT 18 Anos" class="footer__logo-img footer__logo-img--18anos" />
         </div>
         <div class="footer__top-right">
           <p class="footer__tagline">Se é HIT,<br><em>é sucesso.</em></p>

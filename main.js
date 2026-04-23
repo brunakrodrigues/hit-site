@@ -275,6 +275,7 @@ function initHeroAnimation() {
   gsap.set('.hero__tagline',     { opacity: 0 })
   gsap.set('.hero__equalizer',   { opacity: 0 })
   gsap.set('.hero__st-phrase',   { opacity: 0, y: 40, scale: 0.96 })
+  gsap.set('.hero__st-img',      { opacity: 0, scale: 1.05 })
 
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
@@ -301,6 +302,8 @@ function initHeroAnimation() {
 ============================================================ */
 function initHeroScrolltell() {
   const phrases   = document.querySelectorAll('.hero__st-phrase')
+  const images    = document.querySelectorAll('.hero__st-img')
+  const overlayEl = document.querySelector('.hero__st-images-overlay')
   const contentEl = document.getElementById('heroContent')
 
   if (!phrases.length) return
@@ -342,12 +345,19 @@ function initHeroScrolltell() {
         { start: 0.82, peak: 0.88, end: 1.20, exitDur: 0.06 }, // end > 1: nunca sai
       ]
 
+      let maxImgOpacity = 0
+
       phrases.forEach((phrase, i) => {
         const { start, peak, end, exitDur } = phraseTiming[i]
 
         let opacity = 0
         let y       = 40
         let scale   = 0.96
+
+        // Fade da imagem começa um pouco antes da frase
+        const imgStart = Math.max(0, start - 0.04)
+        let imgOpacity = 0
+        let imgScale   = 1.05
 
         if (p >= start && p < peak) {
           // Entrada
@@ -368,8 +378,27 @@ function initHeroScrolltell() {
           scale   = 1 - 0.04 * t
         }
 
+        // Imagem: fade in durante entrada, visível durante peak/end, fade out na saída
+        if (p >= imgStart && p < peak) {
+          const t = (p - imgStart) / (peak - imgStart)
+          imgOpacity = t
+          imgScale   = 1.05 - 0.05 * t
+        } else if (p >= peak && p < end) {
+          imgOpacity = 1
+          imgScale   = 1 - 0.02 * ((p - peak) / (end - peak))
+        } else if (p >= end && p < end + exitDur) {
+          const t = (p - end) / exitDur
+          imgOpacity = 1 - t
+          imgScale   = 0.98 - 0.03 * t
+        }
+
         gsap.set(phrase, { opacity, y, scale })
+        if (images[i]) gsap.set(images[i], { opacity: imgOpacity, scale: imgScale })
+        if (imgOpacity > maxImgOpacity) maxImgOpacity = imgOpacity
       })
+
+      // Overlay escuro só aparece quando uma imagem está visível
+      if (overlayEl) gsap.set(overlayEl, { opacity: maxImgOpacity })
     },
   })
 }
@@ -1038,4 +1067,210 @@ eqBars.forEach((bar, i) => {
   })
 })
 
-console.log('%c🎵 HIT Music Business — Se é HIT, é Sucesso!', 'color: #C9A84C; font-size: 16px; font-weight: bold;')
+/* ============================================================
+   TRANSFORMAÇÃO — Globo de pontos/linhas (canvas 2D)
+============================================================ */
+;(function initTfGlobe() {
+  const canvas = document.getElementById('tfGlobeCanvas')
+  if (!canvas) return
+
+  const ctx = canvas.getContext('2d')
+  const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+  let W = 0, H = 0, R = 0
+  const points = []
+
+  // ── Polígonos simplificados dos continentes [lng, lat] ──
+  // Suficientes pra dar contorno reconhecível quando preenchido com pontos
+  const CONTINENTS = [
+    // América do Norte (incluindo Alasca/Canadá até México)
+    [[-168,65],[-140,70],[-100,73],[-80,78],[-60,60],[-55,48],[-65,45],[-80,25],[-98,18],[-108,24],[-122,32],[-128,48],[-140,58],[-168,65]],
+    // Groenlândia
+    [[-55,60],[-20,60],[-20,83],[-55,83],[-55,60]],
+    // América do Sul
+    [[-80,12],[-60,12],[-50,5],[-35,-5],[-38,-22],[-55,-40],[-70,-55],[-73,-40],[-78,-18],[-80,0],[-80,12]],
+    // Europa
+    [[-10,58],[5,70],[30,71],[45,65],[40,48],[25,40],[10,36],[-10,38],[-10,58]],
+    // África
+    [[-17,35],[10,37],[33,32],[45,12],[51,12],[42,-12],[32,-34],[18,-35],[10,-3],[-5,5],[-17,20],[-17,35]],
+    // Ásia (grande: Rússia, Oriente Médio, China, SE Asia)
+    [[30,70],[60,78],[100,78],[145,75],[175,68],[175,62],[145,55],[140,45],[122,30],[105,18],[100,5],[88,5],[78,6],[68,22],[55,25],[45,38],[40,48],[30,70]],
+    // Índia
+    [[68,8],[88,22],[90,28],[77,32],[68,22],[68,8]],
+    // Península Arábica
+    [[35,30],[55,28],[58,15],[43,12],[35,15],[35,30]],
+    // Indonésia / SE Asia
+    [[95,8],[120,8],[140,0],[140,-8],[112,-10],[95,0],[95,8]],
+    // Austrália
+    [[112,-12],[135,-12],[155,-18],[150,-38],[135,-38],[115,-35],[112,-12]],
+    // Japão
+    [[130,30],[142,38],[146,45],[140,42],[130,35],[130,30]],
+    // Reino Unido / Irlanda
+    [[-10,50],[2,52],[2,58],[-7,58],[-10,50]],
+    // Madagascar
+    [[43,-12],[50,-15],[50,-25],[44,-25],[43,-12]],
+    // Nova Zelândia
+    [[165,-35],[178,-38],[175,-47],[166,-46],[165,-35]],
+  ]
+
+  // Ray casting: ponto dentro do polígono?
+  function inPoly(lng, lat, poly) {
+    let inside = false
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const xi = poly[i][0], yi = poly[i][1]
+      const xj = poly[j][0], yj = poly[j][1]
+      const intersect = ((yi > lat) !== (yj > lat)) &&
+        (lng < (xj - xi) * (lat - yi) / (yj - yi) + xi)
+      if (intersect) inside = !inside
+    }
+    return inside
+  }
+
+  function isLand(lng, lat) {
+    for (let i = 0; i < CONTINENTS.length; i++) {
+      if (inPoly(lng, lat, CONTINENTS[i])) return true
+    }
+    return false
+  }
+
+  // ── Fibonacci sphere com filtro de continentes ──
+  const NUM_SAMPLES = 1500  // candidatos; só guardamos os que caem em terra
+  function generatePoints() {
+    points.length = 0
+    const phi = Math.PI * (3 - Math.sqrt(5))
+    for (let i = 0; i < NUM_SAMPLES; i++) {
+      const y = 1 - (i / (NUM_SAMPLES - 1)) * 2
+      const r = Math.sqrt(1 - y * y)
+      const theta = phi * i
+      const x = Math.cos(theta) * r
+      const z = Math.sin(theta) * r
+
+      // Converter 3D (x,y,z) → lat/lng
+      const lat = Math.asin(y) * 180 / Math.PI
+      const lng = Math.atan2(z, x) * 180 / Math.PI
+
+      if (isLand(lng, lat)) {
+        points.push({ x, y, z })
+      }
+    }
+  }
+
+  // ── Conexões entre vizinhos próximos (pra dar malha triangulada) ──
+  const CONN_DIST = 0.22
+  const connections = []
+  function buildConnections() {
+    connections.length = 0
+    for (let i = 0; i < points.length; i++) {
+      for (let j = i + 1; j < points.length; j++) {
+        const dx = points[i].x - points[j].x
+        const dy = points[i].y - points[j].y
+        const dz = points[i].z - points[j].z
+        const d2 = dx*dx + dy*dy + dz*dz
+        if (d2 < CONN_DIST * CONN_DIST) {
+          connections.push([i, j])
+        }
+      }
+    }
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect()
+    W = rect.width
+    H = rect.height
+    R = Math.min(W, H) * 0.42
+    canvas.width  = W * dpr
+    canvas.height = H * dpr
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  }
+
+  generatePoints()
+  buildConnections()
+  resize()
+  window.addEventListener('resize', resize)
+
+  // ── Cor dourada baseada na profundidade (z) ──
+  // z = -1 (atrás) → escuro/translúcido · z = +1 (frente) → claro/brilhante
+  function goldColor(z, alphaBase = 1) {
+    // depth: 0 (atrás) → 1 (frente)
+    const depth = (z + 1) * 0.5
+    // interpola #be814a → #e4c079 → #f9e9b2
+    let r, g, b
+    if (depth < 0.5) {
+      const t = depth * 2
+      r = 190 + (228 - 190) * t
+      g = 129 + (192 - 129) * t
+      b = 74  + (121 -  74) * t
+    } else {
+      const t = (depth - 0.5) * 2
+      r = 228 + (249 - 228) * t
+      g = 192 + (233 - 192) * t
+      b = 121 + (178 - 121) * t
+    }
+    // alpha: mais transparente atrás
+    const a = alphaBase * (0.25 + depth * 0.75)
+    return `rgba(${r|0}, ${g|0}, ${b|0}, ${a.toFixed(3)})`
+  }
+
+  let rotY = 0
+  let rotX = -0.35  // leve inclinação (polo norte pra cima)
+
+  // buffer de posições projetadas reutilizado a cada frame
+  const proj = new Array(points.length)
+  for (let i = 0; i < points.length; i++) proj[i] = { x: 0, y: 0, z: 0 }
+
+  function render() {
+    rotY += 0.0035
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY)
+    const cosX = Math.cos(rotX), sinX = Math.sin(rotX)
+    const cx = W / 2, cy = H / 2
+
+    // Projetar todos os pontos
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i]
+      // rotY em torno do eixo Y
+      const x1 =  p.x * cosY + p.z * sinY
+      const z1 = -p.x * sinY + p.z * cosY
+      const y1 =  p.y
+      // rotX em torno do eixo X
+      const y2 = y1 * cosX - z1 * sinX
+      const z2 = y1 * sinX + z1 * cosX
+      const x2 = x1
+      proj[i].x = cx + x2 * R
+      proj[i].y = cy + y2 * R
+      proj[i].z = z2
+    }
+
+    ctx.clearRect(0, 0, W, H)
+
+    // ── Desenhar linhas (conexões) ──
+    ctx.lineWidth = 0.6
+    for (let k = 0; k < connections.length; k++) {
+      const [i, j] = connections[k]
+      const a = proj[i], b = proj[j]
+      // Só desenhar se pelo menos um ponto estiver na frente (z > -0.15)
+      const zAvg = (a.z + b.z) * 0.5
+      if (zAvg < -0.3) continue
+      ctx.strokeStyle = goldColor(zAvg, 0.35)
+      ctx.beginPath()
+      ctx.moveTo(a.x, a.y)
+      ctx.lineTo(b.x, b.y)
+      ctx.stroke()
+    }
+
+    // ── Desenhar pontos ──
+    for (let i = 0; i < points.length; i++) {
+      const p = proj[i]
+      const size = 0.9 + (p.z + 1) * 1.2  // maior na frente
+      ctx.fillStyle = goldColor(p.z, 0.95)
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, size, 0, Math.PI * 2)
+      ctx.fill()
+    }
+
+    requestAnimationFrame(render)
+  }
+
+  render()
+})()
+
+console.log('%c🎵 HIT Music Business — Se é HIT, é Sucesso!', 'color: #e4c079; font-size: 16px; font-weight: bold;')
