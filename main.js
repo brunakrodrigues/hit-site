@@ -1080,37 +1080,61 @@ eqBars.forEach((bar, i) => {
   let W = 0, H = 0, R = 0
   const points = []
 
-  // ── Polígonos simplificados dos continentes [lng, lat] ──
-  // Suficientes pra dar contorno reconhecível quando preenchido com pontos
+  // ── Polígonos de continentes [lng, lat] ──
+  // Contornos simplificados mas geograficamente consistentes
   const CONTINENTS = [
-    // América do Norte (incluindo Alasca/Canadá até México)
-    [[-168,65],[-140,70],[-100,73],[-80,78],[-60,60],[-55,48],[-65,45],[-80,25],[-98,18],[-108,24],[-122,32],[-128,48],[-140,58],[-168,65]],
+    // Alasca
+    [[-168,66],[-162,70],[-156,71],[-144,69],[-141,60],[-155,58],[-168,61],[-168,66]],
+    // Canadá + EUA
+    [[-141,69],[-128,70],[-110,70],[-95,72],[-82,73],[-68,82],[-60,62],[-55,52],[-60,47],[-70,44],[-75,40],[-77,37],[-76,35],[-81,31],[-80,25],[-83,28],[-88,30],[-94,29],[-97,26],[-98,19],[-106,22],[-117,32],[-122,37],[-124,42],[-125,48],[-132,55],[-141,60],[-141,69]],
+    // México → Panamá
+    [[-98,19],[-94,17],[-88,16],[-83,14],[-79,8],[-83,10],[-89,14],[-92,16],[-98,19]],
     // Groenlândia
-    [[-55,60],[-20,60],[-20,83],[-55,83],[-55,60]],
+    [[-55,60],[-40,60],[-22,66],[-15,76],[-30,83],[-55,82],[-60,70],[-55,60]],
+    // Islândia
+    [[-24,63],[-13,63],[-13,67],[-24,66],[-24,63]],
     // América do Sul
-    [[-80,12],[-60,12],[-50,5],[-35,-5],[-38,-22],[-55,-40],[-70,-55],[-73,-40],[-78,-18],[-80,0],[-80,12]],
-    // Europa
-    [[-10,58],[5,70],[30,71],[45,65],[40,48],[25,40],[10,36],[-10,38],[-10,58]],
-    // África
-    [[-17,35],[10,37],[33,32],[45,12],[51,12],[42,-12],[32,-34],[18,-35],[10,-3],[-5,5],[-17,20],[-17,35]],
-    // Ásia (grande: Rússia, Oriente Médio, China, SE Asia)
-    [[30,70],[60,78],[100,78],[145,75],[175,68],[175,62],[145,55],[140,45],[122,30],[105,18],[100,5],[88,5],[78,6],[68,22],[55,25],[45,38],[40,48],[30,70]],
+    [[-80,12],[-72,12],[-60,11],[-52,5],[-45,-1],[-35,-5],[-38,-15],[-45,-23],[-52,-30],[-60,-38],[-68,-50],[-72,-54],[-75,-52],[-74,-45],[-72,-30],[-72,-18],[-78,-5],[-81,-4],[-81,2],[-78,8],[-80,12]],
+    // Reino Unido + Irlanda
+    [[-10,51],[-5,50],[-2,51],[2,53],[1,58],[-4,59],[-8,57],[-10,54],[-10,51]],
+    // Europa continental
+    [[-10,44],[-5,43],[0,44],[5,43],[10,45],[15,46],[18,44],[22,40],[25,38],[28,37],[32,37],[36,36],[42,37],[48,44],[55,48],[58,52],[55,58],[45,62],[35,62],[25,62],[15,62],[5,60],[0,57],[-5,55],[-10,51],[-10,44]],
+    // Escandinávia
+    [[5,58],[15,56],[22,58],[28,63],[32,70],[27,71],[20,70],[12,67],[8,64],[5,62],[5,58]],
+    // Rússia (norte)
+    [[30,65],[45,65],[60,68],[80,70],[100,73],[130,73],[155,68],[175,66],[180,70],[180,77],[160,78],[130,78],[100,78],[75,78],[55,75],[45,72],[35,70],[30,65]],
+    // Ásia Central + Mongólia + China + Coréia
+    [[45,48],[55,50],[70,50],[85,50],[100,53],[115,53],[130,53],[135,48],[130,42],[128,38],[122,30],[118,24],[110,22],[105,20],[100,22],[95,28],[90,28],[85,32],[80,32],[75,35],[70,40],[60,45],[50,48],[45,48]],
+    // SE Ásia (Indochina)
+    [[95,20],[100,20],[103,18],[107,22],[110,22],[108,15],[106,10],[102,5],[100,2],[100,8],[96,12],[94,16],[95,20]],
     // Índia
-    [[68,8],[88,22],[90,28],[77,32],[68,22],[68,8]],
+    [[68,23],[72,19],[76,8],[80,7],[82,9],[86,18],[89,22],[91,25],[80,30],[75,32],[70,27],[68,23]],
+    // Ásia Menor (Turquia)
+    [[26,40],[33,37],[40,37],[46,39],[50,36],[48,32],[40,32],[35,35],[28,38],[26,40]],
+    // Oriente Médio (Irã, Iraque)
+    [[40,28],[48,25],[55,25],[60,27],[62,30],[58,35],[52,38],[46,38],[42,32],[40,28]],
     // Península Arábica
-    [[35,30],[55,28],[58,15],[43,12],[35,15],[35,30]],
-    // Indonésia / SE Asia
-    [[95,8],[120,8],[140,0],[140,-8],[112,-10],[95,0],[95,8]],
+    [[35,28],[42,27],[48,25],[55,24],[58,18],[55,14],[50,13],[45,12],[42,15],[38,18],[35,22],[35,28]],
+    // Indonésia (arquipélago)
+    [[95,5],[100,5],[105,2],[112,-1],[118,-4],[125,-3],[132,-3],[138,-2],[141,-6],[140,-9],[130,-9],[120,-9],[110,-9],[102,-3],[95,0],[95,5]],
+    // Nova Guiné
+    [[130,-1],[141,-2],[150,-5],[152,-10],[140,-11],[130,-8],[130,-1]],
+    // Filipinas
+    [[118,6],[122,7],[125,14],[121,18],[118,13],[117,9],[118,6]],
     // Austrália
-    [[112,-12],[135,-12],[155,-18],[150,-38],[135,-38],[115,-35],[112,-12]],
+    [[113,-12],[125,-12],[136,-12],[142,-11],[146,-17],[150,-23],[153,-28],[151,-33],[146,-38],[140,-38],[131,-34],[119,-34],[114,-23],[113,-15],[113,-12]],
+    // Tasmânia
+    [[144,-40],[148,-40],[148,-43],[145,-44],[144,-40]],
     // Japão
-    [[130,30],[142,38],[146,45],[140,42],[130,35],[130,30]],
-    // Reino Unido / Irlanda
-    [[-10,50],[2,52],[2,58],[-7,58],[-10,50]],
+    [[130,32],[134,34],[140,37],[144,43],[145,45],[141,45],[137,41],[133,35],[130,32]],
+    // Nova Zelândia — ilha norte
+    [[172,-34],[178,-37],[178,-41],[173,-42],[170,-37],[172,-34]],
+    // Nova Zelândia — ilha sul
+    [[166,-41],[174,-41],[172,-47],[166,-46],[166,-41]],
     // Madagascar
-    [[43,-12],[50,-15],[50,-25],[44,-25],[43,-12]],
-    // Nova Zelândia
-    [[165,-35],[178,-38],[175,-47],[166,-46],[165,-35]],
+    [[43,-13],[50,-15],[50,-25],[44,-25],[43,-13]],
+    // África
+    [[-17,35],[-8,34],[0,36],[10,37],[18,32],[25,32],[32,32],[35,22],[37,17],[42,12],[46,11],[48,10],[51,11],[50,4],[42,0],[40,-5],[38,-10],[40,-18],[35,-22],[30,-27],[24,-33],[18,-34],[13,-28],[10,-20],[10,-8],[5,-2],[0,5],[-5,5],[-10,6],[-15,12],[-17,20],[-17,35]],
   ]
 
   // Ray casting: ponto dentro do polígono?
@@ -1133,8 +1157,9 @@ eqBars.forEach((bar, i) => {
     return false
   }
 
-  // ── Fibonacci sphere com filtro de continentes ──
-  const NUM_SAMPLES = 1500  // candidatos; só guardamos os que caem em terra
+  // ── Fibonacci sphere preenchendo TODA a esfera ──
+  // Todos os pontos entram (terra e mar); terra fica mais brilhante.
+  const NUM_SAMPLES = 1100
   function generatePoints() {
     points.length = 0
     const phi = Math.PI * (3 - Math.sqrt(5))
@@ -1145,13 +1170,10 @@ eqBars.forEach((bar, i) => {
       const x = Math.cos(theta) * r
       const z = Math.sin(theta) * r
 
-      // Converter 3D (x,y,z) → lat/lng
       const lat = Math.asin(y) * 180 / Math.PI
       const lng = Math.atan2(z, x) * 180 / Math.PI
 
-      if (isLand(lng, lat)) {
-        points.push({ x, y, z })
-      }
+      points.push({ x, y, z, land: isLand(lng, lat) })
     }
   }
 
@@ -1187,6 +1209,87 @@ eqBars.forEach((bar, i) => {
   buildConnections()
   resize()
   window.addEventListener('resize', resize)
+
+  // ── Conexões país-país: raios longos ligando continentes diferentes ──
+  const COUNTRY_LINKS = []
+  ;(function buildCountryLinks() {
+    const landIdx = []
+    for (let i = 0; i < points.length; i++) if (points[i].land) landIdx.push(i)
+    if (landIdx.length < 10) return
+
+    // RNG determinístico (mesmo padrão em todo carregamento)
+    let seed = 1337
+    const rand = () => {
+      seed = (seed * 1103515245 + 12345) | 0
+      return ((seed >>> 1) / 0x7FFFFFFF)
+    }
+
+    const MIN_D2 = 0.75 * 0.75   // distância mínima → evita repetir o mesh
+    const MAX_D2 = 2.3 * 2.3     // evita cordas antipodais estranhas
+    const TARGET = 55
+    const seen = new Set()
+    let attempts = 0
+    while (COUNTRY_LINKS.length < TARGET && attempts < TARGET * 40) {
+      attempts++
+      const a = landIdx[(rand() * landIdx.length) | 0]
+      const b = landIdx[(rand() * landIdx.length) | 0]
+      if (a === b) continue
+      const p = points[a], q = points[b]
+      const dx = p.x - q.x, dy = p.y - q.y, dz = p.z - q.z
+      const d2 = dx*dx + dy*dy + dz*dz
+      if (d2 < MIN_D2 || d2 > MAX_D2) continue
+      const key = a < b ? `${a}-${b}` : `${b}-${a}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      COUNTRY_LINKS.push([a, b])
+    }
+  })()
+
+  // ── Hubs globais (cidades) + rotas que ligam continentes ──
+  const HUBS_LL = [
+    [-74,   40],  //  0 Nova York
+    [-99,   19],  //  1 Cidade do México
+    [-46,  -23],  //  2 São Paulo
+    [-58,  -34],  //  3 Buenos Aires
+    [-118,  34],  //  4 Los Angeles
+    [0,     51],  //  5 Londres
+    [13,    52],  //  6 Berlim
+    [37,    55],  //  7 Moscou
+    [28,    41],  //  8 Istambul
+    [31,    30],  //  9 Cairo
+    [18,   -33],  // 10 Cidade do Cabo
+    [55,    25],  // 11 Dubai
+    [77,    28],  // 12 Delhi
+    [103,    1],  // 13 Singapura
+    [121,   31],  // 14 Xangai
+    [139,   35],  // 15 Tóquio
+    [151,  -33],  // 16 Sydney
+  ]
+  const LINKS = [
+    [0, 2], [0, 5], [0, 4], [0, 1],
+    [4, 15], [4, 16],
+    [2, 3], [2, 10], [2, 5],
+    [5, 6], [5, 9],
+    [6, 7], [6, 8],
+    [7, 14],
+    [8, 9], [8, 11],
+    [9, 10],
+    [10, 11],
+    [11, 12], [11, 13],
+    [12, 14], [12, 13],
+    [13, 14], [13, 16],
+    [14, 15],
+    [15, 16],
+  ]
+
+  function llToXYZ(lng, lat) {
+    const lr = lat * Math.PI / 180
+    const gr = lng * Math.PI / 180
+    const cl = Math.cos(lr)
+    return { x: cl * Math.cos(gr), y: Math.sin(lr), z: cl * Math.sin(gr) }
+  }
+  const hubPts = HUBS_LL.map(([g, l]) => llToXYZ(g, l))
+  const hubProj = hubPts.map(() => ({ x: 0, y: 0, z: 0 }))
 
   // ── Cor dourada baseada na profundidade (z) ──
   // z = -1 (atrás) → escuro/translúcido · z = +1 (frente) → claro/brilhante
@@ -1242,15 +1345,30 @@ eqBars.forEach((bar, i) => {
 
     ctx.clearRect(0, 0, W, H)
 
-    // ── Desenhar linhas (conexões) ──
-    ctx.lineWidth = 0.6
+    // ── Desenhar linhas (conexões) — mar mais suave, terra mais visível ──
+    ctx.lineWidth = 0.5
     for (let k = 0; k < connections.length; k++) {
       const [i, j] = connections[k]
       const a = proj[i], b = proj[j]
-      // Só desenhar se pelo menos um ponto estiver na frente (z > -0.15)
       const zAvg = (a.z + b.z) * 0.5
       if (zAvg < -0.3) continue
-      ctx.strokeStyle = goldColor(zAvg, 0.35)
+      const bothLand = points[i].land && points[j].land
+      const alpha = bothLand ? 0.42 : 0.14
+      ctx.strokeStyle = goldColor(zAvg, alpha)
+      ctx.beginPath()
+      ctx.moveTo(a.x, a.y)
+      ctx.lineTo(b.x, b.y)
+      ctx.stroke()
+    }
+
+    // ── Desenhar rotas país-país (raios dourados ligando continentes) ──
+    for (let l = 0; l < COUNTRY_LINKS.length; l++) {
+      const a = proj[COUNTRY_LINKS[l][0]]
+      const b = proj[COUNTRY_LINKS[l][1]]
+      const zAvg = (a.z + b.z) * 0.5
+      if (zAvg < -0.6) continue
+      ctx.lineWidth = 0.7
+      ctx.strokeStyle = goldColor(zAvg, 0.55)
       ctx.beginPath()
       ctx.moveTo(a.x, a.y)
       ctx.lineTo(b.x, b.y)
@@ -1260,8 +1378,52 @@ eqBars.forEach((bar, i) => {
     // ── Desenhar pontos ──
     for (let i = 0; i < points.length; i++) {
       const p = proj[i]
-      const size = 0.9 + (p.z + 1) * 1.2  // maior na frente
-      ctx.fillStyle = goldColor(p.z, 0.95)
+      const isLandPt = points[i].land
+      const size = (0.8 + (p.z + 1) * 1.15) * (isLandPt ? 1 : 0.7)
+      const alpha = isLandPt ? 0.95 : 0.32
+      ctx.fillStyle = goldColor(p.z, alpha)
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, size, 0, Math.PI * 2)
+      ctx.fill()
+    }
+
+    // ── Projetar hubs ──
+    for (let h = 0; h < hubPts.length; h++) {
+      const p = hubPts[h]
+      const x1 =  p.x * cosY + p.z * sinY
+      const z1 = -p.x * sinY + p.z * cosY
+      const y1 =  p.y
+      const y2 = y1 * cosX - z1 * sinX
+      const z2 = y1 * sinX + z1 * cosX
+      hubProj[h].x = cx + x1 * R
+      hubProj[h].y = cy + y2 * R
+      hubProj[h].z = z2
+    }
+
+    // ── Desenhar rotas como cordas retas (raios dourados atravessando o globo) ──
+    for (let l = 0; l < LINKS.length; l++) {
+      const a = hubProj[LINKS[l][0]]
+      const b = hubProj[LINKS[l][1]]
+      const zAvg = (a.z + b.z) * 0.5
+      if (zAvg < -0.7) continue
+      ctx.lineWidth = 1.0
+      ctx.strokeStyle = goldColor(zAvg, 0.75)
+      ctx.beginPath()
+      ctx.moveTo(a.x, a.y)
+      ctx.lineTo(b.x, b.y)
+      ctx.stroke()
+    }
+
+    // ── Desenhar hubs (nós maiores com halo) ──
+    for (let h = 0; h < hubProj.length; h++) {
+      const p = hubProj[h]
+      if (p.z < -0.4) continue
+      const size = 1.8 + (p.z + 1) * 1.3
+      ctx.fillStyle = goldColor(p.z, 0.25)
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, size * 2.6, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.fillStyle = goldColor(p.z, 1.0)
       ctx.beginPath()
       ctx.arc(p.x, p.y, size, 0, Math.PI * 2)
       ctx.fill()

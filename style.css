@@ -1489,10 +1489,11 @@ body.cursor--hover .cursor-follower { opacity: 0; }
   .pf-partner-logo             { height: 40px; }
   .pf-partner-logo--guinness   { height: 52px; }
 
+  .pf-case__info   { padding: 1rem var(--spacing-md) 0.8rem; }
   .pf-case__num    { font-size: 0.8rem; }
   .pf-case__title  { font-size: 2rem; }
   .pf-case__tag    { font-size: 1rem; }
-  .pf-case__desc   { font-size: 1.05rem; max-width: 100%; }
+  .pf-case__desc   { display: none; }
 }
 
 /* ── 18 ANOS SECTION ─────────────────────────────────────── */
