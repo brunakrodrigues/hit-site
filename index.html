@@ -49,13 +49,13 @@
           <div class="loader__bar-head" id="loaderBarHead"></div>
         </div>
         <div class="loader__meta">
-          <span class="loader__label">Carregando experiência</span>
+          <span class="loader__label" data-i18n="loader.label">Carregando experiência</span>
           <span class="loader__pct" id="loaderPct">0%</span>
         </div>
       </div>
 
       <!-- Tagline -->
-      <p class="loader__tagline">Se é HIT, é Sucesso!</p>
+      <p class="loader__tagline" data-i18n="loader.tagline">Se é HIT, é Sucesso!</p>
 
     </div>
 
@@ -73,13 +73,59 @@
       <img src="assets/images/new-hit-logo.png" alt="HIT Music Business" />
     </a>
     <div class="nav__links">
-      <a href="#manifesto"   class="nav__link">Manifesto</a>
-      <a href="#ecossistema" class="nav__link">Serviços</a>
-      <a href="#portfolio"   class="nav__link">Cases</a>
-      <a href="#simulador"   class="nav__link">Simulador</a>
-      <a href="#nexus"       class="nav__link">Nexus Club</a>
+      <a href="#manifesto"   class="nav__link" data-i18n="nav.manifesto">Manifesto</a>
+      <a href="#ecossistema" class="nav__link" data-i18n="nav.servicos">Serviços</a>
+      <a href="#portfolio"   class="nav__link" data-i18n="nav.cases">Cases</a>
+      <a href="#simulador"   class="nav__link" data-i18n="nav.simulador">Simulador</a>
+      <a href="#nexus"       class="nav__link" data-i18n="nav.nexus">Nexus Club</a>
     </div>
-    <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="nav__cta btn">Contato</a>
+    <div class="nav__right">
+      <div class="nav__lang" id="navLang" role="group" aria-label="Selecionar idioma">
+        <button type="button" class="nav__flag nav__flag--br is-hidden" data-lang="pt" aria-label="Português (Brasil)" title="Português">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="4" fill="#009c3b"/>
+            <polygon points="12,4 21,12 12,20 3,12" fill="#ffdf00"/>
+            <circle cx="12" cy="12" r="3.6" fill="#002776"/>
+            <path d="M8.6 12.4c2 -0.6 4.6 -0.6 6.8 0.2" stroke="#fff" stroke-width="0.6" fill="none"/>
+          </svg>
+        </button>
+        <button type="button" class="nav__flag nav__flag--en" data-lang="en" aria-label="English" title="English">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <clipPath id="flagClipEn"><rect width="24" height="24" rx="4"/></clipPath>
+            <g clip-path="url(#flagClipEn)">
+              <rect width="24" height="24" fill="#012169"/>
+              <path d="M0 0 L24 24 M24 0 L0 24" stroke="#fff" stroke-width="3"/>
+              <path d="M0 0 L24 24 M24 0 L0 24" stroke="#c8102e" stroke-width="1.6"/>
+              <path d="M12 0 V24 M0 12 H24" stroke="#fff" stroke-width="4"/>
+              <path d="M12 0 V24 M0 12 H24" stroke="#c8102e" stroke-width="2.2"/>
+            </g>
+          </svg>
+        </button>
+        <button type="button" class="nav__flag nav__flag--es" data-lang="es" aria-label="Español" title="Español">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <clipPath id="flagClipEs"><rect width="24" height="24" rx="4"/></clipPath>
+            <g clip-path="url(#flagClipEs)">
+              <rect width="24" height="24" fill="#aa151b"/>
+              <rect y="6" width="24" height="12" fill="#f1bf00"/>
+            </g>
+          </svg>
+        </button>
+        <button type="button" class="nav__flag nav__flag--zh" data-lang="zh" aria-label="中文" title="中文">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <clipPath id="flagClipZh"><rect width="24" height="24" rx="4"/></clipPath>
+            <g clip-path="url(#flagClipZh)">
+              <rect width="24" height="24" fill="#de2910"/>
+              <polygon fill="#ffde00" points="5,3 5.9,5.6 8.6,5.6 6.4,7.2 7.2,9.8 5,8.2 2.8,9.8 3.6,7.2 1.4,5.6 4.1,5.6"/>
+              <polygon fill="#ffde00" points="10,2 10.3,2.9 11.2,2.9 10.5,3.5 10.7,4.4 10,3.9 9.3,4.4 9.5,3.5 8.8,2.9 9.7,2.9"/>
+              <polygon fill="#ffde00" points="12,4 12.3,4.9 13.2,4.9 12.5,5.5 12.7,6.4 12,5.9 11.3,6.4 11.5,5.5 10.8,4.9 11.7,4.9"/>
+              <polygon fill="#ffde00" points="12,7 12.3,7.9 13.2,7.9 12.5,8.5 12.7,9.4 12,8.9 11.3,9.4 11.5,8.5 10.8,7.9 11.7,7.9"/>
+              <polygon fill="#ffde00" points="10,9 10.3,9.9 11.2,9.9 10.5,10.5 10.7,11.4 10,10.9 9.3,11.4 9.5,10.5 8.8,9.9 9.7,9.9"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+      <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="nav__cta btn" data-i18n="nav.contato">Contato</a>
+    </div>
   </nav>
 
   <!-- ============================================================
@@ -155,15 +201,15 @@
 
     <!-- CAMADA 3: Conteúdo principal (entrada no load) -->
     <div class="hero__content" id="heroContent">
-      <p class="hero__eyebrow">O poder da música é a estrela do nosso trabalho</p>
+      <p class="hero__eyebrow" data-i18n="hero.eyebrow">O poder da música é a estrela do nosso trabalho</p>
       <h1 class="hero__title">
-        <span class="line"><span class="line-inner">Música é o centro</span></span>
-        <span class="line"><span class="line-inner">de tudo que fazemos.</span></span>
+        <span class="line"><span class="line-inner" data-i18n="hero.title1">Música é o centro</span></span>
+        <span class="line"><span class="line-inner" data-i18n="hero.title2">de tudo que fazemos.</span></span>
       </h1>
-      <p class="hero__sub">Música é conexão, memória e emoção.</p>
+      <p class="hero__sub" data-i18n="hero.sub">Música é conexão, memória e emoção.</p>
       <div class="hero__actions">
-        <a href="#manifesto" class="btn btn--outline hero__btn">Explorar</a>
-        <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="btn hero__btn2">Falar com a HIT</a>
+        <a href="#manifesto" class="btn btn--outline hero__btn" data-i18n="hero.btnExplorar">Explorar</a>
+        <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="btn hero__btn2" data-i18n="hero.btnFalar">Falar com a HIT</a>
       </div>
     </div>
 
@@ -179,11 +225,11 @@
 
     <!-- CAMADA 4: Scrollytelling — frases que aparecem ao rolar -->
     <div class="hero__scrolltell" id="heroScrolltell" aria-hidden="true">
-      <p class="hero__st-phrase" data-index="0">A música conta a história das pessoas.</p>
-      <p class="hero__st-phrase" data-index="1">Música gera conexão.</p>
-      <p class="hero__st-phrase" data-index="2">Conexão gera memória.</p>
-      <p class="hero__st-phrase" data-index="3">Memória gera valor.</p>
-      <p class="hero__st-phrase" data-index="4">Valor gera negócios.</p>
+      <p class="hero__st-phrase" data-index="0" data-i18n="hero.st0">A música conta a história das pessoas.</p>
+      <p class="hero__st-phrase" data-index="1" data-i18n="hero.st1">Música gera conexão.</p>
+      <p class="hero__st-phrase" data-index="2" data-i18n="hero.st2">Conexão gera memória.</p>
+      <p class="hero__st-phrase" data-index="3" data-i18n="hero.st3">Memória gera valor.</p>
+      <p class="hero__st-phrase" data-index="4" data-i18n="hero.st4">Valor gera negócios.</p>
     </div>
 
     <!-- Indicador de scroll -->
@@ -191,12 +237,12 @@
       <div class="hero__mouse">
         <div class="hero__mouse-dot"></div>
       </div>
-      <span>scroll</span>
+      <span data-i18n="hero.scroll">scroll</span>
     </div>
 
     <!-- Tagline canto direito -->
     <div class="hero__tagline">
-      <span>Se é HIT, é Sucesso!</span>
+      <span data-i18n="hero.tagline">Se é HIT, é Sucesso!</span>
     </div>
 
   </section>
@@ -237,9 +283,9 @@
       <!-- Linha 1: label + texto introdutório em duas colunas -->
       <div class="manifesto__intro">
         <div class="manifesto__intro-label">
-          <span class="section-label reveal-text">Manifesto</span>
+          <span class="section-label reveal-text" data-i18n="manifesto.label">Manifesto</span>
         </div>
-        <p class="manifesto__lead reveal-text">
+        <p class="manifesto__lead reveal-text" data-i18n="manifesto.lead">
           Há 18 anos conectamos marcas às pessoas
           através do que há de mais humano: a música.
           Não fazemos entretenimento — fazemos história.
@@ -256,11 +302,11 @@
       <!-- Quote principal — tamanho épico -->
       <div class="manifesto__statement">
         <blockquote class="manifesto__quote-big">
-          <span class="mq-line reveal-line">"Não criamos</span>
-          <span class="mq-line reveal-line mq-line--accent">campanhas.</span>
-          <span class="mq-line reveal-line">Criamos conexões."</span>
+          <span class="mq-line reveal-line" data-i18n="manifesto.quote1">"Não criamos</span>
+          <span class="mq-line reveal-line mq-line--accent" data-i18n="manifesto.quote2">campanhas.</span>
+          <span class="mq-line reveal-line" data-i18n="manifesto.quote3">Criamos conexões."</span>
         </blockquote>
-        <p class="manifesto__sub reveal-text">Criar experiências que marcam a vida das pessoas.</p>
+        <p class="manifesto__sub reveal-text" data-i18n="manifesto.sub">Criar experiências que marcam a vida das pessoas.</p>
       </div>
 
     </div>
@@ -271,28 +317,28 @@
 
         <article class="manifesto__quote-item">
           <span class="manifesto__quote-num">01</span>
-          <p>"Quando usamos música de forma estratégica, transformamos mensagens comuns em experiências que conectam emocionalmente com o público."</p>
+          <p data-i18n="manifesto.q1">"Quando usamos música de forma estratégica, transformamos mensagens comuns em experiências que conectam emocionalmente com o público."</p>
           <footer>
             <div class="manifesto__author-line"></div>
-            <cite>Fabio Lopes — Fundador, HIT Music Business</cite>
+            <cite data-i18n="manifesto.qAuthor">Fabio Lopes — Fundador, HIT Music Business</cite>
           </footer>
         </article>
 
         <article class="manifesto__quote-item">
           <span class="manifesto__quote-num">02</span>
-          <p>"A música está presente em todos os momentos da nossa vida, do nascimento às despedidas, marcando histórias, criando identidades e despertando sentimentos únicos."</p>
+          <p data-i18n="manifesto.q2">"A música está presente em todos os momentos da nossa vida, do nascimento às despedidas, marcando histórias, criando identidades e despertando sentimentos únicos."</p>
           <footer>
             <div class="manifesto__author-line"></div>
-            <cite>Fabio Lopes — Fundador, HIT Music Business</cite>
+            <cite data-i18n="manifesto.qAuthor">Fabio Lopes — Fundador, HIT Music Business</cite>
           </footer>
         </article>
 
         <article class="manifesto__quote-item">
           <span class="manifesto__quote-num">03</span>
-          <p>"Nós amamos música porque ela transforma, aproxima e potencializa mensagens como nenhum outro meio."</p>
+          <p data-i18n="manifesto.q3">"Nós amamos música porque ela transforma, aproxima e potencializa mensagens como nenhum outro meio."</p>
           <footer>
             <div class="manifesto__author-line"></div>
-            <cite>Fabio Lopes — Fundador, HIT Music Business</cite>
+            <cite data-i18n="manifesto.qAuthor">Fabio Lopes — Fundador, HIT Music Business</cite>
           </footer>
         </article>
 
@@ -310,10 +356,10 @@
       <!-- Header -->
       <div class="eco__header">
         <div class="eco__header-left">
-          <span class="section-label reveal-text">Ecossistema</span>
-          <h2 class="section-title reveal-text">O que fazemos</h2>
+          <span class="section-label reveal-text" data-i18n="eco.label">Ecossistema</span>
+          <h2 class="section-title reveal-text" data-i18n="eco.title">O que fazemos</h2>
         </div>
-        <p class="eco__header-desc reveal-text">
+        <p class="eco__header-desc reveal-text" data-i18n-html="eco.desc">
           Seis frentes estratégicas que transformam<br>
           música em resultado para a sua marca.
         </p>
@@ -339,8 +385,8 @@
                 </svg>
               </div>
             </div>
-            <h3 class="eco__title">Estratégia de Marca com Música</h3>
-            <p class="eco__desc">Conectamos marcas ao poder emocional da música para criar posicionamento único.</p>
+            <h3 class="eco__title" data-i18n="eco.c1.title">Estratégia de Marca com Música</h3>
+            <p class="eco__desc" data-i18n="eco.c1.desc">Conectamos marcas ao poder emocional da música para criar posicionamento único.</p>
             <div class="eco__line"></div>
           </div>
         </div>
@@ -356,8 +402,8 @@
                 </svg>
               </div>
             </div>
-            <h3 class="eco__title">Experiências & Ativações</h3>
-            <p class="eco__desc">Momentos que transcendem o comum e geram memória afetiva duradoura.</p>
+            <h3 class="eco__title" data-i18n="eco.c2.title">Experiências & Ativações</h3>
+            <p class="eco__desc" data-i18n="eco.c2.desc">Momentos que transcendem o comum e geram memória afetiva duradoura.</p>
             <div class="eco__line"></div>
           </div>
         </div>
@@ -375,8 +421,8 @@
                 </svg>
               </div>
             </div>
-            <h3 class="eco__title">Eventos & Shows</h3>
-            <p class="eco__desc">Produção de eventos que combinam entretenimento e estratégia de marca.</p>
+            <h3 class="eco__title" data-i18n="eco.c3.title">Eventos & Shows</h3>
+            <p class="eco__desc" data-i18n="eco.c3.desc">Produção de eventos que combinam entretenimento e estratégia de marca.</p>
             <div class="eco__line"></div>
           </div>
         </div>
@@ -393,8 +439,8 @@
                 </svg>
               </div>
             </div>
-            <h3 class="eco__title">Conexão com Artistas</h3>
-            <p class="eco__desc">Curadoria e matchmaking entre marcas e talentos musicais.</p>
+            <h3 class="eco__title" data-i18n="eco.c4.title">Conexão com Artistas</h3>
+            <p class="eco__desc" data-i18n="eco.c4.desc">Curadoria e matchmaking entre marcas e talentos musicais.</p>
             <div class="eco__line"></div>
           </div>
         </div>
@@ -412,8 +458,8 @@
                 </svg>
               </div>
             </div>
-            <h3 class="eco__title">Plataforma & Tecnologia</h3>
-            <p class="eco__desc">Infraestrutura digital para amplificar o alcance e medir resultados.</p>
+            <h3 class="eco__title" data-i18n="eco.c5.title">Plataforma & Tecnologia</h3>
+            <p class="eco__desc" data-i18n="eco.c5.desc">Infraestrutura digital para amplificar o alcance e medir resultados.</p>
             <div class="eco__line"></div>
           </div>
         </div>
@@ -432,8 +478,8 @@
                 </svg>
               </div>
             </div>
-            <h3 class="eco__title">Engajamento & Comunidade</h3>
-            <p class="eco__desc">Construímos bases de fãs que se tornam embaixadores da marca.</p>
+            <h3 class="eco__title" data-i18n="eco.c6.title">Engajamento & Comunidade</h3>
+            <p class="eco__desc" data-i18n="eco.c6.desc">Construímos bases de fãs que se tornam embaixadores da marca.</p>
             <div class="eco__line"></div>
           </div>
         </div>
@@ -443,10 +489,10 @@
       <!-- Statement final -->
       <div class="eco__statement">
         <p class="eco__statement-text">
-          <span class="eco__st-line reveal-line-dark">Música não é um complemento.</span>
-          <span class="eco__st-line eco__st-line--gold reveal-line-dark">É o centro.</span>
+          <span class="eco__st-line reveal-line-dark" data-i18n="eco.st1">Música não é um complemento.</span>
+          <span class="eco__st-line eco__st-line--gold reveal-line-dark" data-i18n="eco.st2">É o centro.</span>
         </p>
-        <p class="eco__statement-sub reveal-text">Ela conecta, ativa, influencia e permanece.</p>
+        <p class="eco__statement-sub reveal-text" data-i18n="eco.stSub">Ela conecta, ativa, influencia e permanece.</p>
       </div>
 
     </div>
@@ -460,15 +506,15 @@
     <!-- Header fora do container para ocupar largura total -->
     <div class="portfolio__header container">
       <div class="portfolio__header-left">
-        <span class="section-label reveal-text">Experiência</span>
-        <h2 class="portfolio__title reveal-text">Cases que<br>marcaram.</h2>
+        <span class="section-label reveal-text" data-i18n="pf.label">Experiência</span>
+        <h2 class="portfolio__title reveal-text" data-i18n-html="pf.title">Cases que<br>marcaram.</h2>
       </div>
       <div class="portfolio__header-right">
-        <p class="portfolio__subtitle reveal-text">
+        <p class="portfolio__subtitle reveal-text" data-i18n-html="pf.subtitle">
           Experiências que geram memória.<br>
           Memória que gera valor.
         </p>
-        <p class="portfolio__phrase reveal-text">
+        <p class="portfolio__phrase reveal-text" data-i18n-html="pf.phrase">
           Criamos experiências que não apenas acontecem… <strong>Mas permanecem.</strong>
         </p>
       </div>
@@ -486,9 +532,9 @@
         </div>
         <div class="pf-case__text">
           <span class="pf-case__num">01</span>
-          <h3 class="pf-case__title">Especial Amigos</h3>
-          <p class="pf-case__tag">TV Globo</p>
-          <p class="pf-case__desc">O maior especial musical da televisão brasileira, reunindo os maiores nomes do sertanejo num único palco.</p>
+          <h3 class="pf-case__title" data-i18n="pf.case1.title">Especial Amigos</h3>
+          <p class="pf-case__tag" data-i18n="pf.case1.tag">TV Globo</p>
+          <p class="pf-case__desc" data-i18n="pf.case1.desc">O maior especial musical da televisão brasileira, reunindo os maiores nomes do sertanejo num único palco.</p>
         </div>
       </div>
     </div>
@@ -507,8 +553,8 @@
           </div>
           <div class="pf-case__text">
             <span class="pf-case__num">02</span>
-            <h3 class="pf-case__title">Villa Mix Festival</h3>
-            <p class="pf-case__tag">Maior Palco do Mundo · Guinness Book</p>
+            <h3 class="pf-case__title" data-i18n="pf.case2.title">Villa Mix Festival</h3>
+            <p class="pf-case__tag" data-i18n="pf.case2.tag">Maior Palco do Mundo · Guinness Book</p>
           </div>
         </div>
       </div>
@@ -521,8 +567,8 @@
         <div class="pf-case__info">
           <div class="pf-case__text">
             <span class="pf-case__num">03</span>
-            <h3 class="pf-case__title">Villa Mix</h3>
-            <p class="pf-case__tag">Goiânia</p>
+            <h3 class="pf-case__title" data-i18n="pf.case3.title">Villa Mix</h3>
+            <p class="pf-case__tag" data-i18n="pf.case3.tag">Goiânia</p>
           </div>
         </div>
       </div>
@@ -557,7 +603,7 @@
           <div class="anos18-badge">
             <img src="assets/images/new-hit-logo.png" alt="HIT Music Business" />
           </div>
-          <p class="anos18-tagline reveal-text">
+          <p class="anos18-tagline reveal-text" data-i18n-html="anos18.tagline">
             Dezoito anos<br>
             construindo história<br>
             com música.
@@ -572,7 +618,7 @@
             <div class="anos18-stat__num">
               <span class="stats__number" data-target="200">0</span><span class="anos18-stat__suf">+</span>
             </div>
-            <p class="anos18-stat__label">Eventos realizados</p>
+            <p class="anos18-stat__label" data-i18n="anos18.stat1">Eventos realizados</p>
           </div>
 
           <div class="anos18-stat reveal-up">
@@ -580,7 +626,7 @@
             <div class="anos18-stat__num">
               <span class="stats__number" data-target="50">0</span><span class="anos18-stat__suf">M+</span>
             </div>
-            <p class="anos18-stat__label">Pessoas impactadas</p>
+            <p class="anos18-stat__label" data-i18n="anos18.stat2">Pessoas impactadas</p>
           </div>
 
           <div class="anos18-stat reveal-up">
@@ -588,7 +634,7 @@
             <div class="anos18-stat__num">
               <span class="stats__number" data-target="80">0</span><span class="anos18-stat__suf">+</span>
             </div>
-            <p class="anos18-stat__label">Marcas parceiras</p>
+            <p class="anos18-stat__label" data-i18n="anos18.stat3">Marcas parceiras</p>
           </div>
 
           <div class="anos18-stat reveal-up">
@@ -596,7 +642,7 @@
             <div class="anos18-stat__num">
               <span class="stats__number" data-target="100">0</span><span class="anos18-stat__suf">%</span>
             </div>
-            <p class="anos18-stat__label">Clientes satisfeitos</p>
+            <p class="anos18-stat__label" data-i18n="anos18.stat4">Clientes satisfeitos</p>
           </div>
 
         </div>
@@ -612,7 +658,7 @@
   ============================================================ -->
   <section class="faixa-impacto" id="faixa-impacto">
     <div class="container">
-      <p class="faixa-impacto__text">Criar experiências que marcam a vida das pessoas.</p>
+      <p class="faixa-impacto__text" data-i18n="faixa.text">Criar experiências que marcam a vida das pessoas.</p>
     </div>
   </section>
 
@@ -634,9 +680,9 @@
 
       <!-- Header -->
       <div class="tf__header">
-        <span class="section-label reveal-text">Transformação</span>
+        <span class="section-label reveal-text" data-i18n="tf.label">Transformação</span>
         <h2 class="tf__title">
-          <span class="tf__title-line reveal-line-dark">O efeito</span>
+          <span class="tf__title-line reveal-line-dark" data-i18n="tf.title1">O efeito</span>
           <span class="tf__title-line tf__title-line--gold reveal-line-dark"><img src="assets/images/new-hit-logo.png" alt="HIT" class="tf__title-logo" />.</span>
         </h2>
       </div>
@@ -647,29 +693,29 @@
         <!-- Coluna SEM HIT -->
         <div class="tf__col tf__col--sem" id="tfColSem">
           <div class="tf__col-header">
-            <span class="tf__col-tag">Sem a HIT</span>
+            <span class="tf__col-tag" data-i18n="tf.semTag">Sem a HIT</span>
             <div class="tf__col-icon tf__col-icon--sem">✕</div>
           </div>
           <ul class="tf__list">
             <li class="tf__item tf__item--sem">
               <span class="tf__item-dot"></span>
-              Marca invisível no entretenimento
+              <span data-i18n="tf.sem1">Marca invisível no entretenimento</span>
             </li>
             <li class="tf__item tf__item--sem">
               <span class="tf__item-dot"></span>
-              Eventos sem estratégia de marca
+              <span data-i18n="tf.sem2">Eventos sem estratégia de marca</span>
             </li>
             <li class="tf__item tf__item--sem">
               <span class="tf__item-dot"></span>
-              Público disperso e não fidelizado
+              <span data-i18n="tf.sem3">Público disperso e não fidelizado</span>
             </li>
             <li class="tf__item tf__item--sem">
               <span class="tf__item-dot"></span>
-              Investimento sem mensuração
+              <span data-i18n="tf.sem4">Investimento sem mensuração</span>
             </li>
             <li class="tf__item tf__item--sem">
               <span class="tf__item-dot"></span>
-              Campanhas genéricas e esquecíveis
+              <span data-i18n="tf.sem5">Campanhas genéricas e esquecíveis</span>
             </li>
           </ul>
         </div>
@@ -687,28 +733,28 @@
         <div class="tf__col tf__col--com" id="tfColCom">
           <div class="tf__col-header">
             <div class="tf__col-icon tf__col-icon--com">✓</div>
-            <span class="tf__col-tag">Com a HIT</span>
+            <span class="tf__col-tag" data-i18n="tf.comTag">Com a HIT</span>
           </div>
           <ul class="tf__list">
             <li class="tf__item tf__item--com">
               <span class="tf__item-dot"></span>
-              Marca protagonista na cultura
+              <span data-i18n="tf.com1">Marca protagonista na cultura</span>
             </li>
             <li class="tf__item tf__item--com">
               <span class="tf__item-dot"></span>
-              Eventos como plataforma estratégica
+              <span data-i18n="tf.com2">Eventos como plataforma estratégica</span>
             </li>
             <li class="tf__item tf__item--com">
               <span class="tf__item-dot"></span>
-              Comunidade engajada e monetizável
+              <span data-i18n="tf.com3">Comunidade engajada e monetizável</span>
             </li>
             <li class="tf__item tf__item--com">
               <span class="tf__item-dot"></span>
-              ROI claro e mensurável
+              <span data-i18n="tf.com4">ROI claro e mensurável</span>
             </li>
             <li class="tf__item tf__item--com">
               <span class="tf__item-dot"></span>
-              Experiências que viram memória
+              <span data-i18n="tf.com5">Experiências que viram memória</span>
             </li>
           </ul>
         </div>
@@ -728,35 +774,35 @@
 
         <!-- Coluna esquerda: pergunta + opções -->
         <div class="sim__left">
-          <span class="section-label reveal-text">Simulador</span>
-          <h2 class="sim__title reveal-text">Qual é o <em>objetivo</em> da sua marca?</h2>
-          <p class="sim__sub reveal-text">Selecione e descubra como a HIT cria o resultado.</p>
+          <span class="section-label reveal-text" data-i18n="sim.label">Simulador</span>
+          <h2 class="sim__title reveal-text" data-i18n-html="sim.title">Qual é o <em>objetivo</em> da sua marca?</h2>
+          <p class="sim__sub reveal-text" data-i18n="sim.sub">Selecione e descubra como a HIT cria o resultado.</p>
 
           <div class="sim__options">
             <button class="sim__opt" data-tipo="branding">
               <span class="sim__opt-num">01</span>
-              <span class="sim__opt-label">Branding</span>
+              <span class="sim__opt-label" data-i18n="sim.opt1">Branding</span>
               <svg class="sim__opt-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M7 17L17 7M17 7H7M17 7v10"/>
               </svg>
             </button>
             <button class="sim__opt" data-tipo="engajamento">
               <span class="sim__opt-num">02</span>
-              <span class="sim__opt-label">Engajamento</span>
+              <span class="sim__opt-label" data-i18n="sim.opt2">Engajamento</span>
               <svg class="sim__opt-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M7 17L17 7M17 7H7M17 7v10"/>
               </svg>
             </button>
             <button class="sim__opt" data-tipo="eventos">
               <span class="sim__opt-num">03</span>
-              <span class="sim__opt-label">Eventos</span>
+              <span class="sim__opt-label" data-i18n="sim.opt3">Eventos</span>
               <svg class="sim__opt-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M7 17L17 7M17 7H7M17 7v10"/>
               </svg>
             </button>
             <button class="sim__opt" data-tipo="receita">
               <span class="sim__opt-num">04</span>
-              <span class="sim__opt-label">Receita</span>
+              <span class="sim__opt-label" data-i18n="sim.opt4">Receita</span>
               <svg class="sim__opt-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M7 17L17 7M17 7H7M17 7v10"/>
               </svg>
@@ -777,60 +823,60 @@
                   <circle cx="24" cy="24" r="3" fill="var(--color-accent)" opacity="0.5"/>
                 </svg>
               </div>
-              <p>Selecione um objetivo ao lado</p>
+              <p data-i18n="sim.placeholder">Selecione um objetivo ao lado</p>
             </div>
 
             <!-- Resultado branding -->
             <div class="sim__result" id="sim-branding" data-result="branding">
-              <span class="sim__result-tag">Branding</span>
-              <h3 class="sim__result-title">Sua marca se torna <em>inconfundível</em></h3>
-              <p class="sim__result-desc">Com música estratégica alinhada à identidade da marca, criamos uma assinatura sonora que se instala na memória do consumidor — tornando cada ponto de contato reconhecível e emocional.</p>
+              <span class="sim__result-tag" data-i18n="sim.bra.tag">Branding</span>
+              <h3 class="sim__result-title" data-i18n-html="sim.bra.title">Sua marca se torna <em>inconfundível</em></h3>
+              <p class="sim__result-desc" data-i18n="sim.bra.desc">Com música estratégica alinhada à identidade da marca, criamos uma assinatura sonora que se instala na memória do consumidor — tornando cada ponto de contato reconhecível e emocional.</p>
               <ul class="sim__result-list">
-                <li>Assinatura sonora exclusiva</li>
-                <li>Jingles e trilhas de campanha</li>
-                <li>Identidade musical completa</li>
+                <li data-i18n="sim.bra.li1">Assinatura sonora exclusiva</li>
+                <li data-i18n="sim.bra.li2">Jingles e trilhas de campanha</li>
+                <li data-i18n="sim.bra.li3">Identidade musical completa</li>
               </ul>
             </div>
 
             <!-- Resultado engajamento -->
             <div class="sim__result" id="sim-engajamento" data-result="engajamento">
-              <span class="sim__result-tag">Engajamento</span>
-              <h3 class="sim__result-title">Espectadores viram <em>fãs</em></h3>
-              <p class="sim__result-desc">Criamos experiências musicais que transformam audiência passiva em comunidade ativa — pessoas que recomendam, compartilham e se tornam embaixadoras orgânicas da sua marca.</p>
+              <span class="sim__result-tag" data-i18n="sim.eng.tag">Engajamento</span>
+              <h3 class="sim__result-title" data-i18n-html="sim.eng.title">Espectadores viram <em>fãs</em></h3>
+              <p class="sim__result-desc" data-i18n="sim.eng.desc">Criamos experiências musicais que transformam audiência passiva em comunidade ativa — pessoas que recomendam, compartilham e se tornam embaixadoras orgânicas da sua marca.</p>
               <ul class="sim__result-list">
-                <li>Ativações ao vivo e digitais</li>
-                <li>Conteúdo musical para redes sociais</li>
-                <li>Campanhas de user-generated content</li>
+                <li data-i18n="sim.eng.li1">Ativações ao vivo e digitais</li>
+                <li data-i18n="sim.eng.li2">Conteúdo musical para redes sociais</li>
+                <li data-i18n="sim.eng.li3">Campanhas de user-generated content</li>
               </ul>
             </div>
 
             <!-- Resultado eventos -->
             <div class="sim__result" id="sim-eventos" data-result="eventos">
-              <span class="sim__result-tag">Eventos</span>
-              <h3 class="sim__result-title">Shows que viram <em>resultados</em></h3>
-              <p class="sim__result-desc">Produzimos e curamos experiências ao vivo que conectam marcas ao público em momentos de alta emoção — do Villa Mix Festival a ativações corporativas de alto impacto.</p>
+              <span class="sim__result-tag" data-i18n="sim.eve.tag">Eventos</span>
+              <h3 class="sim__result-title" data-i18n-html="sim.eve.title">Shows que viram <em>resultados</em></h3>
+              <p class="sim__result-desc" data-i18n="sim.eve.desc">Produzimos e curamos experiências ao vivo que conectam marcas ao público em momentos de alta emoção — do Villa Mix Festival a ativações corporativas de alto impacto.</p>
               <ul class="sim__result-list">
-                <li>Curadoria de artistas e line-up</li>
-                <li>Produção de eventos corporativos</li>
-                <li>Patrocínio e branding em festivais</li>
+                <li data-i18n="sim.eve.li1">Curadoria de artistas e line-up</li>
+                <li data-i18n="sim.eve.li2">Produção de eventos corporativos</li>
+                <li data-i18n="sim.eve.li3">Patrocínio e branding em festivais</li>
               </ul>
             </div>
 
             <!-- Resultado receita -->
             <div class="sim__result" id="sim-receita" data-result="receita">
-              <span class="sim__result-tag">Receita</span>
-              <h3 class="sim__result-title">Entretenimento vira <em>ROI</em></h3>
-              <p class="sim__result-desc">Convertemos músicos e artistas em ativos de marca — e transformamos eventos e experiências culturais em canais de receita mensurável com retorno comprovado.</p>
+              <span class="sim__result-tag" data-i18n="sim.rec.tag">Receita</span>
+              <h3 class="sim__result-title" data-i18n-html="sim.rec.title">Entretenimento vira <em>ROI</em></h3>
+              <p class="sim__result-desc" data-i18n="sim.rec.desc">Convertemos músicos e artistas em ativos de marca — e transformamos eventos e experiências culturais em canais de receita mensurável com retorno comprovado.</p>
               <ul class="sim__result-list">
-                <li>Modelos de monetização de fãs</li>
-                <li>Nexus Club — receita recorrente</li>
-                <li>Licenciamento e direitos musicais</li>
+                <li data-i18n="sim.rec.li1">Modelos de monetização de fãs</li>
+                <li data-i18n="sim.rec.li2">Nexus Club — receita recorrente</li>
+                <li data-i18n="sim.rec.li3">Licenciamento e direitos musicais</li>
               </ul>
             </div>
 
           </div>
           <div class="sim__cta-wrap" id="simCta">
-            <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="btn">Vamos conversar</a>
+            <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="btn" data-i18n="sim.cta">Vamos conversar</a>
           </div>
         </div>
 
@@ -847,15 +893,15 @@
       <!-- Header split -->
       <div class="nexus__header">
         <div class="nexus__header-left">
-          <span class="section-label reveal-text">Produto Exclusivo</span>
+          <span class="section-label reveal-text" data-i18n="nexus.label">Produto Exclusivo</span>
           <h2 class="nexus__title">
-            <span class="nexus__title-line reveal-line-light">Nexus</span>
-            <span class="nexus__title-line nexus__title-line--gold reveal-line-light">Club.</span>
+            <span class="nexus__title-line reveal-line-light" data-i18n="nexus.title1">Nexus</span>
+            <span class="nexus__title-line nexus__title-line--gold reveal-line-light" data-i18n="nexus.title2">Club.</span>
           </h2>
         </div>
         <div class="nexus__header-right">
-          <p class="nexus__desc reveal-text">Uma comunidade fechada que transforma público em base, base em relacionamento — e relacionamento em receita recorrente e sustentável.</p>
-          <a href="nexus.html" class="btn reveal-up">Quero fazer parte</a>
+          <p class="nexus__desc reveal-text" data-i18n="nexus.desc">Uma comunidade fechada que transforma público em base, base em relacionamento — e relacionamento em receita recorrente e sustentável.</p>
+          <a href="nexus.html" class="btn reveal-up" data-i18n="nexus.cta">Quero fazer parte</a>
         </div>
       </div>
 
@@ -863,23 +909,23 @@
       <div class="nexus__pillars">
         <div class="nexus__pillar">
           <div class="nexus__pillar-num">01</div>
-          <h3>Comunidade</h3>
-          <p>Rede curada de marcas, talentos e decisores do mercado de música e entretenimento.</p>
+          <h3 data-i18n="nexus.p1.title">Comunidade</h3>
+          <p data-i18n="nexus.p1.desc">Rede curada de marcas, talentos e decisores do mercado de música e entretenimento.</p>
         </div>
         <div class="nexus__pillar">
           <div class="nexus__pillar-num">02</div>
-          <h3>Gamificação</h3>
-          <p>Mecânicas de engajamento contínuo que mantêm o público ativo, recompensado e conectado.</p>
+          <h3 data-i18n="nexus.p2.title">Gamificação</h3>
+          <p data-i18n="nexus.p2.desc">Mecânicas de engajamento contínuo que mantêm o público ativo, recompensado e conectado.</p>
         </div>
         <div class="nexus__pillar">
           <div class="nexus__pillar-num">03</div>
-          <h3>Receita</h3>
-          <p>Modelos de monetização que convertem base de fãs em fluxo de receita previsível e recorrente.</p>
+          <h3 data-i18n="nexus.p3.title">Receita</h3>
+          <p data-i18n="nexus.p3.desc">Modelos de monetização que convertem base de fãs em fluxo de receita previsível e recorrente.</p>
         </div>
         <div class="nexus__pillar">
           <div class="nexus__pillar-num">04</div>
-          <h3>Experiências</h3>
-          <p>Acesso privilegiado a eventos, bastidores e momentos que apenas membros do Nexus vivem.</p>
+          <h3 data-i18n="nexus.p4.title">Experiências</h3>
+          <p data-i18n="nexus.p4.desc">Acesso privilegiado a eventos, bastidores e momentos que apenas membros do Nexus vivem.</p>
         </div>
       </div>
 
@@ -898,22 +944,22 @@
 
         <div class="cta-final__phrase">
           <div class="cta-final__line-wrap">
-            <p class="cta-final__line"><span class="cta-final__line-inner">Se é HIT, é sentido.</span></p>
+            <p class="cta-final__line"><span class="cta-final__line-inner" data-i18n="cta.l1">Se é HIT, é sentido.</span></p>
           </div>
           <div class="cta-final__line-wrap">
-            <p class="cta-final__line"><span class="cta-final__line-inner">Se é sentido, vira memória.</span></p>
+            <p class="cta-final__line"><span class="cta-final__line-inner" data-i18n="cta.l2">Se é sentido, vira memória.</span></p>
           </div>
           <div class="cta-final__line-wrap">
-            <p class="cta-final__line"><span class="cta-final__line-inner">E memória vira valor.</span></p>
+            <p class="cta-final__line"><span class="cta-final__line-inner" data-i18n="cta.l3">E memória vira valor.</span></p>
           </div>
           <div class="cta-final__line-wrap cta-final__line-wrap--accent">
-            <p class="cta-final__line cta-final__line--accent"><span class="cta-final__line-inner">Se é HIT, é sucesso.</span></p>
+            <p class="cta-final__line cta-final__line--accent"><span class="cta-final__line-inner" data-i18n="cta.l4">Se é HIT, é sucesso.</span></p>
           </div>
         </div>
 
         <div class="cta-final__bottom">
-          <p class="cta-final__sub">Transforme sua marca em algo<br>que as pessoas sintam.</p>
-          <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="btn btn--large cta-final__cta">Falar com a HIT</a>
+          <p class="cta-final__sub" data-i18n-html="cta.sub">Transforme sua marca em algo<br>que as pessoas sintam.</p>
+          <a href="https://wa.me/5511943615015" target="_blank" rel="noopener" class="btn btn--large cta-final__cta" data-i18n="cta.btn">Falar com a HIT</a>
         </div>
 
       </div>
@@ -933,7 +979,7 @@
           <img src="assets/images/hit-18anos.png" alt="HIT 18 Anos" class="footer__logo-img footer__logo-img--18anos" />
         </div>
         <div class="footer__top-right">
-          <p class="footer__tagline">Se é HIT,<br><em>é sucesso.</em></p>
+          <p class="footer__tagline" data-i18n-html="footer.tagline">Se é HIT,<br><em>é sucesso.</em></p>
         </div>
       </div>
 
@@ -944,10 +990,10 @@
       <div class="footer__grid">
         <div class="footer__col footer__col--brand">
           <p class="footer__col-title">HIT Music Business</p>
-          <p class="footer__col-text">Rua Luigi Galvani, 70 – 12º andar<br>Itaim Bibi – São Paulo – SP<br>04575-020</p>
+          <p class="footer__col-text" data-i18n-html="footer.address">Rua Luigi Galvani, 70 – 12º andar<br>Itaim Bibi – São Paulo – SP<br>04575-020</p>
         </div>
         <div class="footer__col">
-          <p class="footer__col-title">Redes</p>
+          <p class="footer__col-title" data-i18n="footer.redes">Redes</p>
           <div class="footer__links">
             <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
             <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
@@ -955,27 +1001,27 @@
           </div>
         </div>
         <div class="footer__col">
-          <p class="footer__col-title">Contato</p>
+          <p class="footer__col-title" data-i18n="footer.contatoTitle">Contato</p>
           <div class="footer__links">
             <a href="mailto:contato@hit.com.br">contato@hit.com.br</a>
             <a href="https://wa.me/5511943615015" target="_blank" rel="noopener">+55 11 94361-5015 (WhatsApp)</a>
           </div>
         </div>
         <div class="footer__col">
-          <p class="footer__col-title">Navegação</p>
+          <p class="footer__col-title" data-i18n="footer.nav">Navegação</p>
           <div class="footer__links">
-            <a href="#manifesto">Manifesto</a>
-            <a href="#ecossistema">Ecossistema</a>
-            <a href="#portfolio">Portfólio</a>
-            <a href="#nexus">Nexus Club</a>
+            <a href="#manifesto" data-i18n="nav.manifesto">Manifesto</a>
+            <a href="#ecossistema" data-i18n="footer.ecossistema">Ecossistema</a>
+            <a href="#portfolio" data-i18n="footer.portfolio">Portfólio</a>
+            <a href="#nexus" data-i18n="nav.nexus">Nexus Club</a>
           </div>
         </div>
       </div>
 
       <!-- Bottom bar -->
       <div class="footer__bottom">
-        <p>© 2026 HIT Music Business. Todos os direitos reservados.</p>
-        <p class="footer__bottom-right">Music Business · São Paulo · Brasil</p>
+        <p data-i18n="footer.copyright">© 2026 HIT Music Business. Todos os direitos reservados.</p>
+        <p class="footer__bottom-right" data-i18n="footer.bottomRight">Music Business · São Paulo · Brasil</p>
       </div>
 
     </div>
